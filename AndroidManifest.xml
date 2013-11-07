@@ -22,6 +22,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.dcc.matc89.spots.SpotEditActivity"
+            android:label="@string/title_activity_spot_edit"
+            android:parentActivityName="com.dcc.matc89.spots.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.dcc.matc89.spots.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

@@ -4,5 +4,9 @@
     <string name="app_name">Spots</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
+    <string name="add_spot">Add Spot</string>
+    <string name="title_activity_spot_edit">SpotEditActivity</string>
+    <string name="btn_next">Va pra proxima tela</string>
+    <string name="action_search">Search</string>
 
 </resources>

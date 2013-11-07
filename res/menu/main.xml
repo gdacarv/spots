@@ -1,9 +1,21 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:spots="http://schemas.android.com/apk/res-auto" >
 
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
-        android:showAsAction="never"
+        spots:showAsAction="never"
         android:title="@string/action_settings"/>
+    
+    <item android:id="@+id/action_search"
+          android:title="@string/action_search"
+          android:icon="@android:drawable/ic_search_category_default"
+          spots:showAsAction="ifRoom|collapseActionView"
+          spots:actionViewClass="android.support.v7.widget.SearchView" />
+    
+    <item 
+        android:id="@+id/action_add_spot"
+        spots:showAsAction="always"
+        android:title="@string/add_spot"/>
 
 </menu>
