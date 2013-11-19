@@ -8,5 +8,8 @@
     <string name="title_activity_spot_edit">SpotEditActivity</string>
     <string name="btn_next">Va pra proxima tela</string>
     <string name="action_search">Search</string>
+    <string name="mygroups">My Groups</string>
+    <string name="title_activity_group_list">Groups</string>
+    <string name="empty_groups_list">You don\'t have any group</string>
 
 </resources>

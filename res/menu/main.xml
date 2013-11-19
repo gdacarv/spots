@@ -17,5 +17,10 @@
         android:id="@+id/action_add_spot"
         spots:showAsAction="always"
         android:title="@string/add_spot"/>
+    
+    <item 
+        android:id="@+id/action_groups"
+        spots:showAsAction="always"
+        android:title="@string/mygroups"/>
 
 </menu>
