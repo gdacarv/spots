@@ -16,5 +16,11 @@
     <string name="users_">Users:</string>
     <string name="spots">Spots</string>
     <string name="join_group">Join Group</string>
+    <string name="title_activity_group_edit">GroupEditActivity</string>
+    <string name="name">Name</string>
+    <string name="description">Description</string>
+    <string name="new_group">New Group</string>
+    <string name="save">Save</string>
+    <string name="add_group">Add Group</string>
 
 </resources>

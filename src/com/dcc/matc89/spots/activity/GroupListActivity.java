@@ -31,6 +31,8 @@ import com.dcc.matc89.spots.model.User;
 
 public class GroupListActivity extends ActionBarActivity {
 
+	private static final int CODE_ADD_GROUP = 1;
+	
 	private TextView mTextEmpty;
 	private View mProgressLoading;
 	private ListView mListView;
@@ -101,8 +103,19 @@ public class GroupListActivity extends ActionBarActivity {
 			//
 			NavUtils.navigateUpFromSameTask(this);
 			return true;
+		case R.id.action_group_add:
+			Intent i = new Intent(this, GroupEditActivity.class);
+			startActivityForResult(i, CODE_ADD_GROUP);
 		}
 		return super.onOptionsItemSelected(item);
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if(requestCode == CODE_ADD_GROUP && resultCode == RESULT_OK){
+			// TODO Reload list
+		}
 	}
 	
 	private OnItemClickListener onItemClickListener = new OnItemClickListener() {

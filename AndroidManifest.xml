@@ -69,6 +69,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.dcc.matc89.spots.activity.MainActivity" />
         </activity>
+        <activity
+            android:name="com.dcc.matc89.spots.activity.GroupEditActivity"
+            android:label="@string/title_activity_group_edit"
+            android:parentActivityName="com.dcc.matc89.spots.activity.GroupListActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.dcc.matc89.spots.activity.GroupListActivity" />
+        </activity>
     </application>
 
 </manifest>

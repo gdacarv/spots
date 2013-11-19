@@ -15,4 +15,9 @@ public class Sport implements Serializable{
 	public String getName() {
 		return name;
 	}
+	
+	@Override
+	public String toString() { // Need to override this to use ArrayAdapter.
+		return getName();
+	}
 }
