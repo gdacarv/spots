@@ -11,5 +11,10 @@
     <string name="mygroups">My Groups</string>
     <string name="title_activity_group_list">Groups</string>
     <string name="empty_groups_list">You don\'t have any group</string>
+    <string name="title_activity_group_detail">GroupDetailActivity</string>
+    <string name="sport_">Sport:</string>
+    <string name="users_">Users:</string>
+    <string name="spots">Spots</string>
+    <string name="join_group">Join Group</string>
 
 </resources>

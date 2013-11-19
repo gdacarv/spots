@@ -1,11 +1,12 @@
 package com.dcc.matc89.spots.activity;
 
+import java.io.Serializable;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,6 +16,8 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -22,6 +25,8 @@ import android.widget.TextView;
 
 import com.dcc.matc89.spots.R;
 import com.dcc.matc89.spots.model.Group;
+import com.dcc.matc89.spots.model.Sport;
+import com.dcc.matc89.spots.model.Spot;
 import com.dcc.matc89.spots.model.User;
 
 public class GroupListActivity extends ActionBarActivity {
@@ -38,6 +43,7 @@ public class GroupListActivity extends ActionBarActivity {
 		mTextEmpty = (TextView) findViewById(R.id.group_list_empty);
 		mProgressLoading = findViewById(R.id.pgs_groups);
 		mListView = (ListView) findViewById(R.id.list);
+		mListView.setOnItemClickListener(onItemClickListener);
 		// Show the Up button in the action bar.
 		setupActionBar();
 		
@@ -48,12 +54,15 @@ public class GroupListActivity extends ActionBarActivity {
 	private List<Group> loadGroupsSync() {
 		// TODO Get from WEB API
 		SystemClock.sleep(3000); // Simulates web request. Remove when use real WEB API
+		String description = "Um grupo qualquer";
 		List<User> emptyImmutableUserList = Collections.<User> emptyList();
+		List<Spot> emptyImmutableSpotList = Collections.<Spot> emptyList();
+		Sport sport = new Sport("Basquete");
 		return Arrays.asList(
-				new Group("Carcar‡", emptyImmutableUserList),
-				new Group("Chacal", emptyImmutableUserList),
-				new Group("Cutia", emptyImmutableUserList),
-				new Group("Limite Radical", emptyImmutableUserList));
+				new Group("Carcar‡", description, emptyImmutableUserList, emptyImmutableSpotList, sport),
+				new Group("Chacal", description, emptyImmutableUserList, emptyImmutableSpotList, sport),
+				new Group("Cutia", description, emptyImmutableUserList, emptyImmutableSpotList, sport),
+				new Group("Limite Radical", description, emptyImmutableUserList, emptyImmutableSpotList, sport));
 	}
 
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -95,6 +104,17 @@ public class GroupListActivity extends ActionBarActivity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+	
+	private OnItemClickListener onItemClickListener = new OnItemClickListener() {
+
+		@Override
+		public void onItemClick(AdapterView<?> adapterView, View view, int position,
+				long id) {
+			Intent i = new Intent(GroupListActivity.this, GroupDetailActivity.class);
+			i.putExtra(GroupDetailActivity.GROUP_KEY, (Serializable) adapterView.getAdapter().getItem(position));
+			startActivity(i);
+		}
+	};
 
 	private class GroupLoadAsyncTask extends AsyncTask<Void, Void, List<Group>> {
 		
