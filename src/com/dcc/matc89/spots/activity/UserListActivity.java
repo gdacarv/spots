@@ -1,13 +1,10 @@
 package com.dcc.matc89.spots.activity;
 
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import android.annotation.TargetApi;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -26,57 +23,47 @@ import android.widget.TextView;
 
 import com.dcc.matc89.spots.R;
 import com.dcc.matc89.spots.model.Group;
-import com.dcc.matc89.spots.model.Sport;
-import com.dcc.matc89.spots.model.Spot;
 import com.dcc.matc89.spots.model.User;
 
-public class GroupListActivity extends ActionBarActivity {
+public class UserListActivity extends ActionBarActivity {
 
-	private static final int CODE_ADD_GROUP = 1;
+	public static final String GROUP_KEY = "group_key";
 	
 	private TextView mTextEmpty;
 	private View mProgressLoading;
 	private ListView mListView;
+	
+	private Group mGroup;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_group_list);
+		setContentView(R.layout.activity_user_list);
 		
-		mTextEmpty = (TextView) findViewById(R.id.group_list_empty);
-		mProgressLoading = findViewById(R.id.pgs_groups);
+		mTextEmpty = (TextView) findViewById(R.id.user_list_empty);
+		mProgressLoading = findViewById(R.id.pgs_users);
 		mListView = (ListView) findViewById(R.id.list);
 		mListView.setOnItemClickListener(onItemClickListener);
+		
+		mGroup = (Group) getIntent().getSerializableExtra(GROUP_KEY);
+		
 		// Show the Up button in the action bar.
 		setupActionBar();
 		
-		loadGroupsAsync();
+		loadUsersAsync();
 	}
 
-	/** This method have to load the groups of current user. This can takes as long as it need (ie. You can do network requests here). */
-	private List<Group> loadGroupsSync() {
-		// TODO Get from WEB API
+	/** This method have to load the users. This can takes as long as it need (ie. You can do network requests here). */
+	private List<User> loadUsersSync() {
+		// TODO Get from WEB API OR from Group object
 		SystemClock.sleep(3000); // Simulates web request. Remove when use real WEB API
-		String description = "Um grupo qualquer";
-		List<Group> groups = new ArrayList<Group>();
-		List<User> users = Arrays.asList(
-				new User("Jo‹o", "Salvador - BA", "1203029403293", groups),
-				new User("Jose", "Salvador - BA", "1203029403293", groups),
-				new User("Joquim", "Salvador - BA", "1203029403293", groups),
-				new User("Jorge", "Salvador - BA", "1203029403293", groups));
-		List<Spot> emptyImmutableSpotList = Collections.<Spot> emptyList();
-		Sport sport = new Sport("Basquete");
-		groups.addAll(Arrays.asList(
-				new Group("Carcar‡", description, users, emptyImmutableSpotList, sport),
-				new Group("Chacal", description, users, emptyImmutableSpotList, sport),
-				new Group("Cutia", description, users, emptyImmutableSpotList, sport),
-				new Group("Limite Radical", description, users, emptyImmutableSpotList, sport)));
-		return groups;
+		
+		return mGroup.getUsers();
 	}
 
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
-	private void loadGroupsAsync() {
-		AsyncTask<Void, Void, List<Group>> task = new GroupLoadAsyncTask();
+	private void loadUsersAsync() {
+		AsyncTask<Void, Void, List<User>> task = new UserLoadAsyncTask();
 		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
 			task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 		else
@@ -93,7 +80,7 @@ public class GroupListActivity extends ActionBarActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.group_list, menu);
+		getMenuInflater().inflate(R.menu.user_list, menu);
 		return true;
 	}
 
@@ -110,19 +97,8 @@ public class GroupListActivity extends ActionBarActivity {
 			//
 			NavUtils.navigateUpFromSameTask(this);
 			return true;
-		case R.id.action_group_add:
-			Intent i = new Intent(this, GroupEditActivity.class);
-			startActivityForResult(i, CODE_ADD_GROUP);
 		}
 		return super.onOptionsItemSelected(item);
-	}
-	
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-		if(requestCode == CODE_ADD_GROUP && resultCode == RESULT_OK){
-			// TODO Reload list
-		}
 	}
 	
 	private OnItemClickListener onItemClickListener = new OnItemClickListener() {
@@ -130,28 +106,29 @@ public class GroupListActivity extends ActionBarActivity {
 		@Override
 		public void onItemClick(AdapterView<?> adapterView, View view, int position,
 				long id) {
-			Intent i = new Intent(GroupListActivity.this, GroupDetailActivity.class);
-			i.putExtra(GroupDetailActivity.GROUP_KEY, (Serializable) adapterView.getAdapter().getItem(position));
-			startActivity(i);
+			// TODO Send user o UserDetail (profile) activity
+			/*Intent i = new Intent(UserListActivity.this, UserDetailActivity.class);
+			i.putExtra(UserDetailActivity.USER_KEY, (Serializable) adapterView.getAdapter().getItem(position));
+			startActivity(i);*/
 		}
 	};
 
-	private class GroupLoadAsyncTask extends AsyncTask<Void, Void, List<Group>> {
+	private class UserLoadAsyncTask extends AsyncTask<Void, Void, List<User>> {
 		
 		@Override
-		protected List<Group> doInBackground(Void... params) {
-			List<Group> groups = loadGroupsSync();
-			return groups;
+		protected List<User> doInBackground(Void... params) {
+			List<User> users = loadUsersSync();
+			return users;
 		}
 		
 		@Override
-		protected void onPostExecute(List<Group> result) {
+		protected void onPostExecute(List<User> result) {
 			super.onPostExecute(result);
 			mProgressLoading.setVisibility(View.INVISIBLE);
 			if(result == null || result.isEmpty())
 				mTextEmpty.setVisibility(View.VISIBLE);
 			else{
-				ListAdapter adapter = new ArrayAdapter<Group>(GroupListActivity.this, android.R.layout.simple_list_item_1, result);
+				ListAdapter adapter = new ArrayAdapter<User>(UserListActivity.this, android.R.layout.simple_list_item_1, result);
 				mListView.setAdapter(adapter);
 			}
 		}

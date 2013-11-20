@@ -1,5 +1,6 @@
 package com.dcc.matc89.spots.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
@@ -90,7 +91,9 @@ public class GroupDetailActivity extends ActionBarActivity {
 		
 		@Override
 		public void onClick(View v) {
-			Toast.makeText(GroupDetailActivity.this, "Users clicked.", Toast.LENGTH_SHORT).show(); // TODO Remove this, and make real connections
+			Intent i = new Intent(GroupDetailActivity.this, UserListActivity.class);
+			i.putExtra(UserListActivity.GROUP_KEY, mGroup);
+			startActivity(i);
 		}
 	};
 	

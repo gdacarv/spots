@@ -22,5 +22,7 @@
     <string name="new_group">New Group</string>
     <string name="save">Save</string>
     <string name="add_group">Add Group</string>
+    <string name="title_activity_user_list">Users</string>
+    <string name="empty_users_list">This group don\'t have any users</string>
 
 </resources>
