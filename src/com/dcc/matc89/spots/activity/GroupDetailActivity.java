@@ -48,7 +48,7 @@ public class GroupDetailActivity extends ActionBarActivity {
 		mDescription.setText(mGroup.getDescription());
 		mSport.setText(mGroup.getSport().getName());
 		mUsersCount.setText(String.valueOf(mGroup.getMembersCount()));
-		mSpotsCount.setText(String.valueOf(mGroup.getSpots().size()));
+		mSpotsCount.setText(String.valueOf(mGroup.getSpotsCount()));
 		mUsers.setOnClickListener(onUsersClickListener);
 		mSpots.setOnClickListener(onSpotsClickListener);
 		mJoin.setOnClickListener(onJoinClickListener);
@@ -101,7 +101,10 @@ public class GroupDetailActivity extends ActionBarActivity {
 		
 		@Override
 		public void onClick(View v) {
-			Toast.makeText(GroupDetailActivity.this, "Spots clicked.", Toast.LENGTH_SHORT).show(); // TODO Remove this, and make real connections
+			Intent i = new Intent(GroupDetailActivity.this, SpotListActivity.class);
+			i.putExtra(SpotListActivity.GROUP_KEY, mGroup);
+			startActivity(i);
+			//Toast.makeText(GroupDetailActivity.this, "Spots clicked.", Toast.LENGTH_SHORT).show(); // TODO Remove this, and make real connections
 		}
 	};
 	

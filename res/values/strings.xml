@@ -10,7 +10,7 @@
     <string name="action_search">Search</string>
     <string name="mygroups">My Groups</string>
     <string name="title_activity_group_list">Groups</string>
-    <string name="empty_groups_list">You don\'t have any group</string>
+    <string name="empty_groups_list">You don\'t have any groups</string>
     <string name="title_activity_group_detail">GroupDetailActivity</string>
     <string name="sport_">Sport:</string>
     <string name="users_">Users:</string>
@@ -23,6 +23,8 @@
     <string name="save">Save</string>
     <string name="add_group">Add Group</string>
     <string name="title_activity_user_list">Users</string>
-    <string name="empty_users_list">This group don\'t have any users</string>
+    <string name="title_activity_spot_list">Spots</string>
+    <string name="empty_users_list">This group doesn\'t have any users</string>
+    <string name="empty_spots_list">This group doesn\'t have any spots</string>
 
 </resources>

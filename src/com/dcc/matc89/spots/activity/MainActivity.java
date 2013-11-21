@@ -5,9 +5,9 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
+//import android.view.View;
+//import android.view.View.OnClickListener;
+//import android.widget.Button;
 
 import com.dcc.matc89.spots.R;
 import com.google.android.gms.maps.GoogleMap;
@@ -32,18 +32,20 @@ public class MainActivity extends ActionBarActivity {
 			map.setMyLocationEnabled(true);
 		}
 
-		Button button = (Button)findViewById(R.id.btn_gonextscreen);
-		button.setOnClickListener(onBtnClickListener);
+// Eliminando o botão do meio do mapa
+//		Button button = (Button)findViewById(R.id.btn_gonextscreen);
+//		button.setOnClickListener(onBtnClickListener);
 	}
 
-	private OnClickListener onBtnClickListener = new OnClickListener() {
-
-		@Override
-		public void onClick(View v) {
-			Intent i = new Intent(MainActivity.this, SpotEditActivity.class);
-			startActivity(i);
-		}
-	};
+// Listener do botão
+//	private OnClickListener onBtnClickListener = new OnClickListener() {
+//
+//		@Override
+//		public void onClick(View v) {
+//			Intent i = new Intent(MainActivity.this, SpotEditActivity.class);
+//			startActivity(i);
+//		}
+//	};
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

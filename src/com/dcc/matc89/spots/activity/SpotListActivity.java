@@ -21,9 +21,9 @@ import android.widget.TextView;
 
 import com.dcc.matc89.spots.R;
 import com.dcc.matc89.spots.model.Group;
-import com.dcc.matc89.spots.model.User;
+import com.dcc.matc89.spots.model.Spot;
 
-public class UserListActivity extends ActionBarActivity {
+public class SpotListActivity extends ActionBarActivity {
 
 	public static final String GROUP_KEY = "group_key";
 	
@@ -36,10 +36,10 @@ public class UserListActivity extends ActionBarActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_user_list);
+		setContentView(R.layout.activity_spot_list);
 		
-		mTextEmpty = (TextView) findViewById(R.id.user_list_empty);
-		mProgressLoading = findViewById(R.id.pgs_users);
+		mTextEmpty = (TextView) findViewById(R.id.spot_list_empty);
+		mProgressLoading = findViewById(R.id.pgs_spot);
 		mListView = (ListView) findViewById(R.id.list);
 		mListView.setOnItemClickListener(onItemClickListener);
 		
@@ -48,20 +48,20 @@ public class UserListActivity extends ActionBarActivity {
 		// Show the Up button in the action bar.
 		setupActionBar();
 		
-		loadUsersAsync();
+		loadSpotsAsync();
 	}
 
 	/** This method have to load the users. This can takes as long as it need (ie. You can do network requests here). */
-	private List<User> loadUsersSync() {
+	private List<Spot> loadSpotsSync() {
 		// TODO Get from WEB API OR from Group object
 		SystemClock.sleep(3000); // Simulates web request. Remove when use real WEB API
 		
-		return mGroup.getUsers();
+		return mGroup.getSpots();
 	}
 
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
-	private void loadUsersAsync() {
-		AsyncTask<Void, Void, List<User>> task = new UserLoadAsyncTask();
+	private void loadSpotsAsync() {
+		AsyncTask<Void, Void, List<Spot>> task = new SpotLoadAsyncTask();
 		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
 			task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 		else
@@ -78,7 +78,8 @@ public class UserListActivity extends ActionBarActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.user_list, menu);
+		//TODO change to spot_list
+		getMenuInflater().inflate(R.menu.spot_list, menu);
 		return true;
 	}
 
@@ -104,29 +105,29 @@ public class UserListActivity extends ActionBarActivity {
 		@Override
 		public void onItemClick(AdapterView<?> adapterView, View view, int position,
 				long id) {
-			// TODO Send user o UserDetail (profile) activity
+			// TODO Send user to SpotDetail activity
 			/*Intent i = new Intent(UserListActivity.this, UserDetailActivity.class);
-			i.putExtra(UserDetailActivity.USER_KEY, (Serializable) adapterView.getAdapter().getItem(position));
+			i.putExtra(SpotDetailActivity.SPOT_KEY, (Serializable) adapterView.getAdapter().getItem(position));
 			startActivity(i);*/
 		}
 	};
 
-	private class UserLoadAsyncTask extends AsyncTask<Void, Void, List<User>> {
+	private class SpotLoadAsyncTask extends AsyncTask<Void, Void, List<Spot>> {
 		
 		@Override
-		protected List<User> doInBackground(Void... params) {
-			List<User> users = loadUsersSync();
-			return users;
+		protected List<Spot> doInBackground(Void... params) {
+			List<Spot> spots = loadSpotsSync();
+			return spots;
 		}
 		
 		@Override
-		protected void onPostExecute(List<User> result) {
+		protected void onPostExecute(List<Spot> result) {
 			super.onPostExecute(result);
 			mProgressLoading.setVisibility(View.INVISIBLE);
 			if(result == null || result.isEmpty())
 				mTextEmpty.setVisibility(View.VISIBLE);
 			else{
-				ListAdapter adapter = new ArrayAdapter<User>(UserListActivity.this, android.R.layout.simple_list_item_1, result);
+				ListAdapter adapter = new ArrayAdapter<Spot>(SpotListActivity.this, android.R.layout.simple_list_item_1, result);
 				mListView.setAdapter(adapter);
 			}
 		}

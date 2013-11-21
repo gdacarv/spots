@@ -29,6 +29,7 @@ import com.dcc.matc89.spots.model.Group;
 import com.dcc.matc89.spots.model.Sport;
 import com.dcc.matc89.spots.model.Spot;
 import com.dcc.matc89.spots.model.User;
+import com.google.android.gms.maps.model.LatLng;
 
 public class GroupListActivity extends ActionBarActivity {
 
@@ -64,13 +65,19 @@ public class GroupListActivity extends ActionBarActivity {
 				new User("Jose", "Salvador - BA", "1203029403293", groups),
 				new User("Joquim", "Salvador - BA", "1203029403293", groups),
 				new User("Jorge", "Salvador - BA", "1203029403293", groups));
-		List<Spot> emptyImmutableSpotList = Collections.<Spot> emptyList();
 		Sport sport = new Sport("Basquete");
+		List<Sport> sportList = Arrays.asList(sport);
+		List<Spot> spots = Arrays.asList(
+				new Spot("Estádio de Esportes UFBA", "Um spot qualquer", groups, sportList, -12.971111, -38.510833),
+				new Spot("Parque Foo", "Um spot qualquer", groups, sportList, -12.971111, -38.510833),
+				new Spot("Praça Orlástica", "Um spot qualquer", groups, sportList, -12.971111, -38.510833),
+				new Spot("Lugar para praticar esportes", "Um spot qualquer", groups, sportList, -12.971111, -38.510833)
+				);
 		groups.addAll(Arrays.asList(
-				new Group("Carcar‡", description, users, emptyImmutableSpotList, sport),
-				new Group("Chacal", description, users, emptyImmutableSpotList, sport),
-				new Group("Cutia", description, users, emptyImmutableSpotList, sport),
-				new Group("Limite Radical", description, users, emptyImmutableSpotList, sport)));
+				new Group("Carcar‡", description, users, spots, sport),
+				new Group("Chacal", description, users, spots, sport),
+				new Group("Cutia", description, users, spots, sport),
+				new Group("Limite Radical", description, users, spots, sport)));
 		return groups;
 	}
 

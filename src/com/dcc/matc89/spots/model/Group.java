@@ -74,6 +74,10 @@ public class Group implements Serializable{
 		this.spots = spots;
 	}
 
+	public int getSpotsCount(){
+		return spots.size();
+	}
+	
 	@Override
 	public String toString() { // Need to override this to use ArrayAdapter.
 		return getName();
