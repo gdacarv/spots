@@ -26,5 +26,6 @@
     <string name="title_activity_spot_list">Spots</string>
     <string name="empty_users_list">This group doesn\'t have any users</string>
     <string name="empty_spots_list">This group doesn\'t have any spots</string>
+    <string name="groups">Groups</string>
 
 </resources>
