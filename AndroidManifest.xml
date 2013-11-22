@@ -93,6 +93,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.dcc.matc89.spots.activity.MainActivity" />
         </activity>
+        <activity
+            android:name="com.dcc.matc89.spots.activity.UserDetailActivity"
+            android:label="@string/title_activity_user_detail"
+            android:parentActivityName="com.dcc.matc89.spots.activity.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.dcc.matc89.spots.activity.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

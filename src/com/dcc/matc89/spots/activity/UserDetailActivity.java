@@ -27,6 +27,7 @@ public class UserDetailActivity extends ActionBarActivity {
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_profile_main);
+		setupActionBar();
 		
 		mProfilePicture = (ImageView) findViewById(R.id.profile_picture);
 		mName = (TextView) findViewById(R.id.name);
@@ -39,7 +40,7 @@ public class UserDetailActivity extends ActionBarActivity {
 		// TODO Set profile picture
 		mName.setText(mData.getName());
 		mLocation.setText(mData.getLocation());
-		mGroupsAmount.setText(mData.getGroups().size());
+		mGroupsAmount.setText(String.valueOf(mData.getGroups().size()));
 		mGroupsButton.setOnClickListener(onGroupClicked);
 	}
 	
@@ -53,5 +54,12 @@ public class UserDetailActivity extends ActionBarActivity {
 		}
 		
 	};
+	
+	/**
+	 * Set up the {@link android.app.ActionBar}.
+	 */
+	private void setupActionBar() {
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+	}
 
 }
