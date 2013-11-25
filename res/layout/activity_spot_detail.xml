@@ -26,7 +26,13 @@
 		    android:layout_width="wrap_content"
 		    android:layout_height="160dp"
 		    android:layout_below="@id/txt_spot_description"
-		    class="com.google.android.gms.maps.SupportMapFragment" />
+		    class="com.google.android.gms.maps.SupportMapFragment">
+		<ImageView
+		    android:alpha="0"
+		    android:id="@+id/mapSnapshot"
+		    android:layout_width="match_parent"
+		    android:layout_height="match_parent" />
+		</fragment>
 	
 		<TextView
 		    android:id="@+id/txt_photos_label"

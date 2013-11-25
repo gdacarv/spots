@@ -1,9 +1,14 @@
 package com.dcc.matc89.spots.activity;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.util.List;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Environment;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -11,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
@@ -34,6 +40,7 @@ public class SpotDetailActivity extends ActionBarActivity {
 	private TextView mDescription, mGroupsCount;
 	private View mGroups;
 	private LinearLayout mSports;
+	private ImageView mapImage;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -41,10 +48,9 @@ public class SpotDetailActivity extends ActionBarActivity {
 		setContentView(R.layout.activity_spot_detail);
 		mSpot = (Spot) getIntent().getSerializableExtra(SPOT_KEY);
 		
-		
-		//TODO change this to a map view instead, it is messing up with the scroll.
+		mapImage = (ImageView) findViewById(R.id.mapSnapshot);
 		SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapSpot);
-		GoogleMap map = mapFragment.getMap();
+		final GoogleMap map = mapFragment.getMap();
 		
 		if (map != null) {
 			map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
@@ -54,6 +60,21 @@ public class SpotDetailActivity extends ActionBarActivity {
 					.snippet(mSpot.getDescription()));
 			spotMarker.showInfoWindow();
 			map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mSpot.getLatitude() + 0.001,mSpot.getLongitude()), 15));
+
+			
+			map.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+			    public void onMapLoaded() {
+			        map.snapshot(new GoogleMap.SnapshotReadyCallback() {
+			            public void onSnapshotReady(Bitmap bitmap) {
+			                mapImage.setAlpha(1);
+			                mapImage.setImageBitmap(bitmap);
+			            }
+			        });
+			    }
+			});
+			//TODO check map unloading for possible memory leaks.
+			
+
 		}
 		
 		// Show the Up button in the action bar.
