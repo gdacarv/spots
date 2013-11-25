@@ -10,7 +10,6 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 
@@ -19,7 +18,7 @@ import com.dcc.matc89.spots.model.Sport;
 
 public class GroupEditActivity extends ActionBarActivity {
 	
-	private EditText mName, mDescription;
+	//private EditText mName, mDescription;
 	private Spinner mSport;
 
 	@Override
@@ -82,7 +81,7 @@ public class GroupEditActivity extends ActionBarActivity {
 		// TODO Get real sports. 
 		
 		return Arrays.asList(
-				new Sport("V™lei"),
+				new Sport("Vôlei"),
 				new Sport("Futebol"),
 				new Sport("Baquete"),
 				new Sport("Slackline"),

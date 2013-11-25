@@ -2,6 +2,7 @@ package com.dcc.matc89.spots.model;
 
 import java.io.Serializable;
 import java.util.List;
+
 import com.google.android.gms.maps.model.LatLng;
 
 public class Spot  implements Serializable{
@@ -61,16 +62,6 @@ public class Spot  implements Serializable{
 		return sports;
 	}
 
-
-	public void setSports(List<Sport> sports) {
-		this.sports = sports;
-	}
-	
-	@Override
-	public String toString() { // Need to override this to use ArrayAdapter.
-		return getName();
-	}
-
 	public double getLongitude() {
 		return longitude;
 	}
@@ -85,6 +76,19 @@ public class Spot  implements Serializable{
 
 	public void setLatitude(double latitude) {
 		this.latitude = latitude;
+	}
+
+	public void setSports(List<Sport> sports) {
+		this.sports = sports;
+	}
+	
+	public LatLng getLatLng(){
+		return new LatLng (this.latitude,this.longitude);
+	}
+	
+	@Override
+	public String toString() { 
+		return getName();
 	}
 	
 }

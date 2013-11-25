@@ -10,12 +10,4 @@
         android:layout_height="match_parent"
         class="com.google.android.gms.maps.SupportMapFragment" />
 
-<!--    <Button
-        android:id="@+id/btn_gonextscreen"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="@string/btn_next" />
--->
-
 </RelativeLayout>

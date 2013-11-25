@@ -14,6 +14,7 @@
     <string name="title_activity_group_detail">GroupDetailActivity</string>
     <string name="sport_">Sport:</string>
     <string name="users_">Users:</string>
+    <string name="groups_">Groups:</string>
     <string name="spots">Spots</string>
     <string name="join_group">Join Group</string>
     <string name="title_activity_group_edit">GroupEditActivity</string>
@@ -28,5 +29,8 @@
     <string name="empty_spots_list">This group doesn\'t have any spots</string>
     <string name="groups">Groups</string>
     <string name="title_activity_user_detail">Profile</string>
+    <string name="fotos">Pictures</string>
+    <string name="esporte">Sports</string>
+    <string name="title_activity_spot_detail">SpotDetailActivity</string>
 
 </resources>

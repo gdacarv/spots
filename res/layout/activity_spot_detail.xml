@@ -1,0 +1,104 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ScrollView1"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".SpotDetailActivity" >
+	
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+	    <TextView
+	        android:id="@+id/txt_spot_description"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+		    android:layout_marginBottom="10dp"
+	        android:text="@string/hello_world" />
+	    
+	    <!--TODO change this to a map view instead, it is messing up with the scroll --> 
+		<fragment
+		    android:id="@+id/mapSpot"
+		    android:layout_width="wrap_content"
+		    android:layout_height="160dp"
+		    android:layout_below="@id/txt_spot_description"
+		    class="com.google.android.gms.maps.SupportMapFragment" />
+	
+		<TextView
+		    android:id="@+id/txt_photos_label"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:textSize="18sp"
+		    android:textStyle="bold"
+		    android:layout_marginTop="10dp"
+		    android:layout_marginBottom="10dp"
+		    android:layout_below="@id/mapSpot"
+		    android:text="@string/fotos" />
+		
+		<HorizontalScrollView
+		    android:id="@+id/horizontalScrollView1"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_below="@+id/txt_photos_label"
+		    style="@android:style/Widget.Button"
+		    android:layout_marginRight="18dp" >
+
+		    <LinearLayout
+		        android:id="@+id/list_spot_pictures"
+		        android:layout_width="wrap_content"
+		        android:layout_height="match_parent"
+		        android:orientation="horizontal" >
+		    </LinearLayout>
+		</HorizontalScrollView>
+		
+		
+		<TextView
+		    android:id="@+id/txt_sports_label"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:textSize="18sp"
+		    android:textStyle="bold"
+		    android:layout_marginTop="10dp"
+		    android:layout_marginBottom="10dp"
+		    android:layout_alignParentLeft="true"
+		    android:layout_below="@id/horizontalScrollView1"
+		    android:text="@string/esporte" />
+
+		<LinearLayout
+		    android:id="@+id/list_spot_sports"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_below="@id/txt_sports_label"
+		    android:layout_marginLeft="15dp"
+		    android:layout_marginBottom="10dp"
+		    android:orientation="vertical" >
+		</LinearLayout>
+		
+		<LinearLayout
+	        android:id="@+id/view_spot_groups"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        style="@android:style/Widget.Button"
+	        android:orientation="horizontal"
+	        android:layout_below="@id/list_spot_sports" >
+	
+	        <TextView
+	            android:id="@+id/txt_spot_groups_label"
+	            android:layout_width="0dp"
+	            android:layout_height="wrap_content"
+	            android:layout_weight="1"
+	            android:text="@string/groups_" />
+	
+	        <TextView
+	            android:id="@+id/txt_spot_groups"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content" />
+	    </LinearLayout>
+
+		
+	</RelativeLayout>
+</ScrollView>

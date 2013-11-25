@@ -1,9 +1,6 @@
 package com.dcc.matc89.spots.activity;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import android.annotation.TargetApi;
@@ -26,10 +23,7 @@ import android.widget.TextView;
 
 import com.dcc.matc89.spots.R;
 import com.dcc.matc89.spots.model.Group;
-import com.dcc.matc89.spots.model.Sport;
-import com.dcc.matc89.spots.model.Spot;
-import com.dcc.matc89.spots.model.User;
-import com.google.android.gms.maps.model.LatLng;
+import com.dcc.matc89.spots.model.StaticDatabase;
 
 public class GroupListActivity extends ActionBarActivity {
 
@@ -58,27 +52,7 @@ public class GroupListActivity extends ActionBarActivity {
 	private List<Group> loadGroupsSync() {
 		// TODO Get from WEB API
 		SystemClock.sleep(3000); // Simulates web request. Remove when use real WEB API
-		String description = "Um grupo qualquer";
-		List<Group> groups = new ArrayList<Group>();
-		List<User> users = Arrays.asList(
-				new User("Jo‹o", "Salvador - BA", "1203029403293", groups),
-				new User("Jose", "Salvador - BA", "1203029403293", groups),
-				new User("Joquim", "Salvador - BA", "1203029403293", groups),
-				new User("Jorge", "Salvador - BA", "1203029403293", groups));
-		Sport sport = new Sport("Basquete");
-		List<Sport> sportList = Arrays.asList(sport);
-		List<Spot> spots = Arrays.asList(
-				new Spot("Estádio de Esportes UFBA", "Um spot qualquer", groups, sportList, -12.971111, -38.510833),
-				new Spot("Parque Foo", "Um spot qualquer", groups, sportList, -12.971111, -38.510833),
-				new Spot("Praça Orlástica", "Um spot qualquer", groups, sportList, -12.971111, -38.510833),
-				new Spot("Lugar para praticar esportes", "Um spot qualquer", groups, sportList, -12.971111, -38.510833)
-				);
-		groups.addAll(Arrays.asList(
-				new Group("Carcar‡", description, users, spots, sport),
-				new Group("Chacal", description, users, spots, sport),
-				new Group("Cutia", description, users, spots, sport),
-				new Group("Limite Radical", description, users, spots, sport)));
-		return groups;
+		return StaticDatabase.getSingleton().getGroups();
 	}
 
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)

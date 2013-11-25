@@ -1,8 +1,10 @@
 package com.dcc.matc89.spots.activity;
 
+import java.io.Serializable;
 import java.util.List;
 
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -106,9 +108,9 @@ public class SpotListActivity extends ActionBarActivity {
 		public void onItemClick(AdapterView<?> adapterView, View view, int position,
 				long id) {
 			// TODO Send user to SpotDetail activity
-			/*Intent i = new Intent(UserListActivity.this, UserDetailActivity.class);
+			Intent i = new Intent(SpotListActivity.this, SpotDetailActivity.class);
 			i.putExtra(SpotDetailActivity.SPOT_KEY, (Serializable) adapterView.getAdapter().getItem(position));
-			startActivity(i);*/
+			startActivity(i);
 		}
 	};
 

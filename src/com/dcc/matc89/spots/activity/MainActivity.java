@@ -5,13 +5,10 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-//import android.view.View;
-//import android.view.View.OnClickListener;
-//import android.widget.Button;
 
 import com.dcc.matc89.spots.R;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -28,24 +25,16 @@ public class MainActivity extends ActionBarActivity {
 
 		if(map != null){
 			map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-
-			map.setMyLocationEnabled(true);
+			LatLng myLocation = new LatLng(-12.97, -38.51);
+			map.moveCamera(CameraUpdateFactory.newLatLngZoom(myLocation,14));
+			
+			//TODO estudar LocationClient API e google play services http://developer.android.com/training/location/retrieve-current.html
+			//map.setMyLocationEnabled(true);
+			//LatLng myLocation = new LatLng(map.getMyLocation().getLatitude(), map.getMyLocation().getLongitude());
+			//map.moveCamera(CameraUpdateFactory.newLatLngZoom(myLocation,10));
 		}
 
-// Eliminando o botão do meio do mapa
-//		Button button = (Button)findViewById(R.id.btn_gonextscreen);
-//		button.setOnClickListener(onBtnClickListener);
 	}
-
-// Listener do botão
-//	private OnClickListener onBtnClickListener = new OnClickListener() {
-//
-//		@Override
-//		public void onClick(View v) {
-//			Intent i = new Intent(MainActivity.this, SpotEditActivity.class);
-//			startActivity(i);
-//		}
-//	};
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

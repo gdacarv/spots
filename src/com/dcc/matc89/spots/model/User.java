@@ -45,6 +45,10 @@ public class User implements Serializable{
 	public List<Group> getGroups() {
 		return groups;
 	}
+	
+	public void setGroups( List<Group> groups) {
+		this.groups = groups;
+	}
 
 	@Override
 	public String toString() {
