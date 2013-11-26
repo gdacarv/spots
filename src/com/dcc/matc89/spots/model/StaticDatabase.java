@@ -37,6 +37,14 @@ public class StaticDatabase {
 			users.get(i).setGroups(groups);
 			spots.get(i).setGroups(groups);
 		}
+		setSports(Arrays.asList(
+				new Sport("Vôlei"),
+				new Sport("Futebol"),
+				new Sport("Baquete"),
+				new Sport("Slackline"),
+				new Sport("Escalada"),
+				new Sport("Parkour"))
+				);
 	}
 	
 	public static StaticDatabase getSingleton(){
@@ -74,5 +82,69 @@ public class StaticDatabase {
 	public void setSpots(List<Spot> spots) {
 		this.spots = spots;
 	}
-		
+	
+	public void addGroup(Group group){
+		this.groups.add(group);
+	}
+	
+	public void addSpot(Spot spot){
+		this.spots.add(spot);
+	}
+	
+	public void addUser(User user){
+		this.users.add(user);
+	}
+	
+	public void addSport(Sport sport){
+		this.sports.add(sport);
+	}
+	
+	public Group getGroupByName(String name){
+		int i = 0;
+		while(i < this.groups.size()){
+			if(this.groups.get(i).getName().equalsIgnoreCase(name)){
+				return this.groups.get(i);
+			} else {
+				i = i+1;
+			}
+		}
+		return null;
+	}
+	
+	public User getUserByFId (String facebookId) {
+		int i = 0;
+		while(i < this.users.size()){
+			if (this.users.get(i).getFacebookId().equalsIgnoreCase(facebookId)) {
+				return this.users.get(i);
+			} else {
+				i = i+1;
+			}
+		}
+		return null;
+	}
+	
+	public Sport getSportByName (String name) {
+		int i = 0;
+		while (i < this.sports.size()){
+			if (this.sports.get(i).getName().equalsIgnoreCase(name)) {
+				return this.sports.get(i);
+			} else {
+				i = i+1;
+			}
+		}
+		return null;
+	}
+	
+	public Spot getSpotByName (String name) {
+		int i = 0;
+		while (i < this.spots.size()){
+			if (this.spots.get(i).getName().equalsIgnoreCase(name)){
+				return this.spots.get(i);
+			} else {
+				i = i+1;
+			}
+		}
+		return null;
+	}
+	
 }

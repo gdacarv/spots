@@ -13,9 +13,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:src="@drawable/abc_list_selector_disabled_holo_dark" />
-
-    <TextView
+        android:contentDescription="@string/profile_pic_description"
+        android:src="@drawable/ic_contact_picture_2"/>
+    
+	<TextView
         android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

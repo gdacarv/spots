@@ -1,36 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Spots</string>
-    <string name="action_settings">Settings</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="add_spot">Add Spot</string>
-    <string name="title_activity_spot_edit">SpotEditActivity</string>
-    <string name="btn_next">Va pra proxima tela</string>
     <string name="action_search">Search</string>
-    <string name="mygroups">My Groups</string>
-    <string name="title_activity_group_list">Groups</string>
-    <string name="empty_groups_list">You don\'t have any groups</string>
-    <string name="title_activity_group_detail">GroupDetailActivity</string>
-    <string name="sport_">Sport:</string>
-    <string name="users_">Users:</string>
-    <string name="groups_">Groups:</string>
-    <string name="spots">Spots</string>
-    <string name="join_group">Join Group</string>
-    <string name="title_activity_group_edit">GroupEditActivity</string>
-    <string name="name">Name</string>
-    <string name="description">Description</string>
-    <string name="new_group">New Group</string>
-    <string name="save">Save</string>
+    <string name="action_settings">Settings</string>
     <string name="add_group">Add Group</string>
-    <string name="title_activity_user_list">Users</string>
-    <string name="title_activity_spot_list">Spots</string>
-    <string name="empty_users_list">This group doesn\'t have any users</string>
+    <string name="app_name">Spots</string>
+    <string name="add_spot">Add Spot</string>
+    <string name="btn_next">Va pra proxima tela</string>
+    <string name="description">Description</string>
+    <string name="empty_groups_list">You don\'t have any groups</string>
     <string name="empty_spots_list">This group doesn\'t have any spots</string>
-    <string name="groups">Groups</string>
-    <string name="title_activity_user_detail">Profile</string>
-    <string name="fotos">Pictures</string>
+    <string name="empty_users_list">This group doesn\'t have any users</string>
     <string name="esporte">Sports</string>
+    <string name="fotos">Pictures</string>
+    <string name="groups">Groups</string>
+    <string name="groups_">Groups:</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="join_group">Join Group</string>
+    <string name="map_snapshot_description">Map location of the spot.</string>
+    <string name="mygroups">My Groups</string>
+    <string name="name">Name</string>
+    <string name="new_group">New Group</string>
+    <string name="new_spot">New Spot</string>
+    <string name="profile_pic_description">User Profile Picture.</string>
+    <string name="save">Save</string>
+    <string name="spots">Spots</string>
+    <string name="sport_">Sport:</string>
+    <string name="title_activity_group_detail">GroupDetailActivity</string>
+    <string name="title_activity_group_edit">GroupEditActivity</string>
+    <string name="title_activity_group_list">Groups</string>
     <string name="title_activity_spot_detail">SpotDetailActivity</string>
+    <string name="title_activity_spot_edit">SpotEditActivity</string>
+    <string name="title_activity_spot_list">Spots</string>
+    <string name="title_activity_user_detail">Profile</string>
+    <string name="title_activity_user_list">Users</string>
+    <string name="users_">Users:</string>
 
 </resources>

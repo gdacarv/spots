@@ -1,14 +1,10 @@
 package com.dcc.matc89.spots.activity;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.util.List;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.os.Environment;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -39,7 +35,7 @@ public class SpotDetailActivity extends ActionBarActivity {
 	
 	private TextView mDescription, mGroupsCount;
 	private View mGroups;
-	private LinearLayout mSports;
+	private LinearLayout mSports, mPics;
 	private ImageView mapImage;
 
 	@Override
@@ -65,7 +61,8 @@ public class SpotDetailActivity extends ActionBarActivity {
 			map.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
 			    public void onMapLoaded() {
 			        map.snapshot(new GoogleMap.SnapshotReadyCallback() {
-			            public void onSnapshotReady(Bitmap bitmap) {
+			            @SuppressWarnings("deprecation")
+						public void onSnapshotReady(Bitmap bitmap) {
 			                mapImage.setAlpha(1);
 			                mapImage.setImageBitmap(bitmap);
 			            }
@@ -87,11 +84,19 @@ public class SpotDetailActivity extends ActionBarActivity {
 		mDescription = (TextView) findViewById(R.id.txt_spot_description);
 		mGroupsCount = (TextView) findViewById(R.id.txt_spot_groups);
 		mGroups = findViewById(R.id.view_spot_groups);
+		mPics = (LinearLayout) findViewById(R.id.list_spot_pictures);
 		mSports = (LinearLayout) findViewById(R.id.list_spot_sports);
 		
 		mDescription.setText(mSpot.getDescription());
 		mGroupsCount.setText(String.valueOf(mSpot.getGroupsCount()));
 		mGroups.setOnClickListener(onGroupsClickListener);
+		
+		for (int i = 0; i < 4; i = i + 1){
+			ImageView picture = new ImageView(this);
+			picture.setImageDrawable(getResources().getDrawable(android.R.drawable.gallery_thumb));
+			picture.setPadding(5, 2, 5, 2);
+			mPics.addView(picture, new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+		}
 		
 		List<Sport> sports = mSpot.getSports();
 		for (int i = 0; i < sports.size(); i = i + 1) {
@@ -140,10 +145,10 @@ public class SpotDetailActivity extends ActionBarActivity {
 		
 		@Override
 		public void onClick(View v) {
+			//TODO pass this spot's data to group list.
 			Intent i = new Intent(SpotDetailActivity.this, GroupListActivity.class);
 			//i.putExtra(GroupListActivity.SPOT_KEY, mSpot);
 			startActivity(i);
-			//Toast.makeText(SpotDetailActivity.this, "Groups clicked.", Toast.LENGTH_SHORT).show(); // TODO Remove this, and make real connections
 		}
 	};
 

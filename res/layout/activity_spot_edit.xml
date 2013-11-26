@@ -1,4 +1,4 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -6,11 +6,49 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
     tools:context=".SpotEditActivity" >
+
+    <EditText
+        android:id="@+id/txt_editspot_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/name" >
+
+        <requestFocus />
+    </EditText>
+
+    <EditText
+        android:id="@+id/txt_editspot_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textMultiLine"
+        android:lines="3"
+        android:hint="@string/description" />
+
+    <Spinner
+        android:id="@+id/spn_editspot_sport"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
     
-    <ListView
-        android:id="@+id/listview"
+    <fragment
+		android:id="@+id/mapSpotEdit"
+		android:layout_width="wrap_content"
+		android:layout_height="150dp"
+		class="com.google.android.gms.maps.SupportMapFragment">
+		<ImageView
+		    android:contentDescription="@string/map_snapshot_description"
+		    android:alpha="0"
+		    android:id="@+id/mapSnapshotEdit"
+		    android:layout_width="match_parent"
+		    android:layout_height="match_parent" />
+	</fragment>
+    
+    <Spinner
+        android:id="@+id/spn_editspot_pics"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-</RelativeLayout>
+</LinearLayout>

@@ -1,6 +1,5 @@
 package com.dcc.matc89.spots.activity;
 
-import java.util.Arrays;
 import java.util.List;
 
 import android.os.Bundle;
@@ -15,6 +14,7 @@ import android.widget.SpinnerAdapter;
 
 import com.dcc.matc89.spots.R;
 import com.dcc.matc89.spots.model.Sport;
+import com.dcc.matc89.spots.model.StaticDatabase;
 
 public class GroupEditActivity extends ActionBarActivity {
 	
@@ -80,13 +80,6 @@ public class GroupEditActivity extends ActionBarActivity {
 	private List<Sport> getAllSports() { // This method can't perform long running operations such as network requests.
 		// TODO Get real sports. 
 		
-		return Arrays.asList(
-				new Sport("Vôlei"),
-				new Sport("Futebol"),
-				new Sport("Baquete"),
-				new Sport("Slackline"),
-				new Sport("Escalada"),
-				new Sport("Parkour")
-				);
+		return StaticDatabase.getSingleton().getSports();
 	}
 }

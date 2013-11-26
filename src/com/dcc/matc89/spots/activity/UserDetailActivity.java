@@ -37,7 +37,8 @@ public class UserDetailActivity extends ActionBarActivity {
 		
 		mData = (User) getIntent().getSerializableExtra(USER_KEY);
 		
-		// TODO Set profile picture
+		// TODO Grab Profile pic from facebook
+		mProfilePicture.setImageDrawable(getResources().getDrawable(R.drawable.ic_contact_picture_2));
 		mName.setText(mData.getName());
 		mLocation.setText(mData.getLocation());
 		mGroupsAmount.setText(String.valueOf(mData.getGroups().size()));

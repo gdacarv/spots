@@ -1,29 +1,36 @@
 package com.dcc.matc89.spots.activity;
 
-import com.dcc.matc89.spots.R;
-import com.dcc.matc89.spots.R.id;
-import com.dcc.matc89.spots.R.layout;
-import com.dcc.matc89.spots.R.menu;
+import java.util.Arrays;
+import java.util.List;
 
+import com.dcc.matc89.spots.R;
+import com.dcc.matc89.spots.model.Sport;
+import com.dcc.matc89.spots.model.Spot;
+import com.dcc.matc89.spots.model.StaticDatabase;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.ImageView;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.annotation.TargetApi;
-import android.content.Intent;
-import android.os.Build;
 
 //Para que a ActionBar funcione em todas as versões é necessário estender ActionBarActivity ao invés de Activity
 public class SpotEditActivity extends ActionBarActivity {
-	ListView l;
+		
+	private Spot mSpot;
+	private Spinner mSport, mPics;
+	private ImageView mapImage;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -32,34 +39,60 @@ public class SpotEditActivity extends ActionBarActivity {
 		// Show the Up button in the action bar.
 		setupActionBar();
 		
-        String[] list = { "A", "B", "C" };
-        
-        l = (ListView) findViewById(R.id.listview);
-        l.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, list));
-        l.setOnItemClickListener(new OnItemClickListener() {
+        setupViews();
+	}
 
-			@Override
-			public void onItemClick(AdapterView<?> adapter, View v, int position,
-					long id) {
-				switch (position) {
-				case 0:
-					Toast.makeText(SpotEditActivity.this, "AAAAAAAAA", Toast.LENGTH_SHORT).show();
-				case 1:
-					Intent gotoDDG = new Intent(Intent.ACTION_BUG_REPORT);
-					startActivity(gotoDDG);
-				}
-			}
-        	
-        });
+	private void setupViews() {
+		mSport = (Spinner) findViewById(R.id.spn_editspot_sport);
+		mPics = (Spinner) findViewById(R.id.spn_editspot_pics);
+		
+		List<Sport> sports = getAllSports();
+		SpinnerAdapter sportsAdapter = new ArrayAdapter<Sport>(this, android.R.layout.simple_spinner_item, sports);
+		mSport.setAdapter(sportsAdapter);
+		
+		List<String> pictures = Arrays.asList("Pictures", "Add More", "Feature still to come");
+		SpinnerAdapter picsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, pictures);
+		mPics.setAdapter(picsAdapter);
+		
+		//TODO change this to location clicked on main activity before adding spot or to the spot being edited.
+		mSpot = StaticDatabase.getSingleton().getSpots().get(0);
+		
+		mapImage = (ImageView) findViewById(R.id.mapSnapshotEdit);
+		SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapSpotEdit);
+		final GoogleMap map = mapFragment.getMap();
+		
+		if (map != null) {
+			map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+			map.addMarker(new MarkerOptions().position(mSpot.getLatLng()));
+			map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mSpot.getLatitude() + 0.001,mSpot.getLongitude()), 15));
+
+			
+			map.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+			    public void onMapLoaded() {
+			        map.snapshot(new GoogleMap.SnapshotReadyCallback() {
+			            @SuppressWarnings("deprecation")
+						public void onSnapshotReady(Bitmap bitmap) {
+			                mapImage.setAlpha(1);
+			                mapImage.setImageBitmap(bitmap);
+			            }
+			        });
+			    }
+			});
+		}
+			//TODO check map unloading for possible memory leaks.
+	}
+	
+	private List<Sport> getAllSports() {
+		return StaticDatabase.getSingleton().getSports();
 	}
 
 	/**
 	 * Set up the {@link android.app.ActionBar}, if the API is available.
 	 */
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	private void setupActionBar() {
 		ActionBar actionBar = getSupportActionBar();
 	    actionBar.setDisplayHomeAsUpEnabled(true);
+	    actionBar.setTitle(R.string.new_spot);
 	}
 
 	@Override
@@ -81,6 +114,11 @@ public class SpotEditActivity extends ActionBarActivity {
 			// http://developer.android.com/design/patterns/navigation.html#up-vs-back
 			//
 			NavUtils.navigateUpFromSameTask(this);
+			return true;
+		case R.id.action_save:
+			// TODO Send new spot OR update spot to WEB API
+			setResult(RESULT_OK);
+			finish();
 			return true;
 		}
 		return super.onOptionsItemSelected(item);

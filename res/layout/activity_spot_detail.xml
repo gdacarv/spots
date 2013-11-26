@@ -20,14 +20,14 @@
 		    android:layout_marginBottom="10dp"
 	        android:text="@string/hello_world" />
 	    
-	    <!--TODO change this to a map view instead, it is messing up with the scroll --> 
 		<fragment
 		    android:id="@+id/mapSpot"
 		    android:layout_width="wrap_content"
-		    android:layout_height="160dp"
+		    android:layout_height="150dp"
 		    android:layout_below="@id/txt_spot_description"
 		    class="com.google.android.gms.maps.SupportMapFragment">
 		<ImageView
+		    android:contentDescription="@string/map_snapshot_description"
 		    android:alpha="0"
 		    android:id="@+id/mapSnapshot"
 		    android:layout_width="match_parent"
