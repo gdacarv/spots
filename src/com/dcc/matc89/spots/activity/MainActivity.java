@@ -23,7 +23,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 
-// Para que a ActionBar funcione em todas as vers›es Ž necess‡rio estender ActionBarActivity ao invŽs de Activity
+// Para que a ActionBar funcione em todas as versï¿½es ï¿½ necessï¿½rio estender ActionBarActivity ao invï¿½s de Activity
 public class MainActivity extends ActionBarActivity implements
 		GooglePlayServicesClient.ConnectionCallbacks,
 		GooglePlayServicesClient.OnConnectionFailedListener {
@@ -154,8 +154,11 @@ public class MainActivity extends ActionBarActivity implements
 		Toast.makeText(this, "Connected", Toast.LENGTH_SHORT).show();
 		mCurrentLocation = mLocationClient.getLastLocation();
 		map.setMyLocationEnabled(true);
-		LatLng mLocationLatLng = new LatLng(mCurrentLocation.getLatitude(),mCurrentLocation.getLongitude());
-		map.moveCamera(CameraUpdateFactory.newLatLngZoom(mLocationLatLng, 15));
+		
+		if (mCurrentLocation != null) {
+			LatLng mLocationLatLng = new LatLng(mCurrentLocation.getLatitude(),mCurrentLocation.getLongitude());
+			map.moveCamera(CameraUpdateFactory.newLatLngZoom(mLocationLatLng, 15));
+		}
 	}
 
 	@Override
@@ -164,7 +167,7 @@ public class MainActivity extends ActionBarActivity implements
 	}
 	
 	@Override
-	protected void onStop(){
+ 	protected void onStop(){
 		mLocationClient.disconnect();
 		super.onStop();
 	}
