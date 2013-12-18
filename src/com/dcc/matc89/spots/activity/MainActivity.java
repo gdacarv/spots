@@ -1,5 +1,7 @@
 package com.dcc.matc89.spots.activity;
 
+import java.util.List;
+
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
@@ -11,9 +13,13 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.dcc.matc89.spots.R;
+import com.dcc.matc89.spots.model.Spot;
+import com.dcc.matc89.spots.network.FetchSpots;
+import com.dcc.matc89.spots.network.FetchSpots.OnSpotsReceiver;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -22,6 +28,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.MarkerOptionsCreator;
 
 // Para que a ActionBar funcione em todas as vers�es � necess�rio estender ActionBarActivity ao inv�s de Activity
 public class MainActivity extends ActionBarActivity implements
@@ -34,54 +42,6 @@ public class MainActivity extends ActionBarActivity implements
 	private GoogleMap map;
 	private Location mCurrentLocation;
 	
-	
-	public static class ErrorDialogFragment extends DialogFragment{
-		private Dialog mDialog;
-		
-		public ErrorDialogFragment(){
-			super();
-			mDialog = null;
-		}
-		
-		public void setDialog(Dialog dialog) {
-			mDialog = dialog;
-		}
-		
-		@Override
-		public Dialog onCreateDialog(Bundle savedInstanceState){
-			return mDialog;
-		}
-	}
-	
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data){
-		switch(requestCode){
-			case CONNECTION_FAILURE_RESOLUTION_REQUEST :
-				switch(resultCode) {
-					case Activity.RESULT_OK :
-						
-					break;
-				}
-			}
-	}
-	
-	private boolean servicesConnected() {
-		int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
-		ConnectionResult connectionResult = new ConnectionResult(resultCode, null);
-		if (resultCode == ConnectionResult.SUCCESS) {
-			Log.d("Location Updates", "Google Play services is available.");
-			return true;
-		} else {
-			int errorCode = connectionResult.getErrorCode();
-			Dialog errorDialog = GooglePlayServicesUtil.getErrorDialog(errorCode, this, CONNECTION_FAILURE_RESOLUTION_REQUEST);
-			if (errorDialog != null) {
-				ErrorDialogFragment errorFragment = new ErrorDialogFragment();
-				errorFragment.setDialog(errorDialog);
-				errorFragment.show(getSupportFragmentManager(), "Location Updates");
-			}
-		}
-		return false;
-	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -90,19 +50,21 @@ public class MainActivity extends ActionBarActivity implements
 
 		mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
 		map = mapFragment.getMap();
-		map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+		if(map != null)
+			map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
 		
 		if (servicesConnected()){
 			mLocationClient = new LocationClient(this,this,this);
 		}
 
-
+		loadSpots();
 	}
 
 	@Override
 	protected void onStart(){
 		super.onStart();
-		mLocationClient.connect();
+		if(mLocationClient != null)
+			mLocationClient.connect();
 	}
 
 	
@@ -144,6 +106,18 @@ public class MainActivity extends ActionBarActivity implements
 			showErrorDialog(connectionResult.getErrorCode());
 		}
 	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data){
+		switch(requestCode){
+			case CONNECTION_FAILURE_RESOLUTION_REQUEST :
+				switch(resultCode) {
+					case Activity.RESULT_OK :
+						
+					break;
+				}
+			}
+	}
 
 	private void showErrorDialog(int errorCode) {
 		Toast.makeText(this, "Connection Error ".concat(String.valueOf(errorCode)), Toast.LENGTH_SHORT).show();
@@ -168,7 +142,68 @@ public class MainActivity extends ActionBarActivity implements
 	
 	@Override
  	protected void onStop(){
-		mLocationClient.disconnect();
+		if(mLocationClient != null)
+			mLocationClient.disconnect();
 		super.onStop();
+	}
+	
+	private boolean servicesConnected() {
+		int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+		ConnectionResult connectionResult = new ConnectionResult(resultCode, null);
+		if (resultCode == ConnectionResult.SUCCESS) {
+			Log.d("Location Updates", "Google Play services is available.");
+			return true;
+		} else {
+			int errorCode = connectionResult.getErrorCode();
+			Dialog errorDialog = GooglePlayServicesUtil.getErrorDialog(errorCode, this, CONNECTION_FAILURE_RESOLUTION_REQUEST);
+			if (errorDialog != null) {
+				ErrorDialogFragment errorFragment = new ErrorDialogFragment();
+				errorFragment.setDialog(errorDialog);
+				errorFragment.show(getSupportFragmentManager(), "Location Updates");
+			}
+		}
+		return false;
+	}
+	
+	public static class ErrorDialogFragment extends DialogFragment{
+		private Dialog mDialog;
+		
+		public ErrorDialogFragment(){
+			super();
+			mDialog = null;
+		}
+		
+		public void setDialog(Dialog dialog) {
+			mDialog = dialog;
+		}
+		
+		@Override
+		public Dialog onCreateDialog(Bundle savedInstanceState){
+			return mDialog;
+		}
+	}
+
+	private void loadSpots() {
+		new FetchSpots().getSpots(onSpotsReceiver);
+	}
+	
+	private OnSpotsReceiver onSpotsReceiver = new OnSpotsReceiver() {
+		
+		@Override
+		public void onSpotsReceived(List<Spot> spots) {
+			findViewById(R.id.pgs_map).setVisibility(View.INVISIBLE);
+			createMarkersFromSpots(spots);
+		}
+	};
+
+	private void createMarkersFromSpots(List<Spot> spots) {
+		if(map != null){
+			for(Spot spot : spots){
+				map.addMarker(new MarkerOptions()
+						.position(new LatLng(spot.getLatitude(), spot.getLongitude()))
+						.title(spot.getName())
+						.snippet(spot.getDescription()));
+			}
+		}
 	}
 }

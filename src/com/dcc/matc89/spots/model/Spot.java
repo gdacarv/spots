@@ -3,19 +3,24 @@ package com.dcc.matc89.spots.model;
 import java.io.Serializable;
 import java.util.List;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.google.android.gms.maps.model.LatLng;
 
 public class Spot  implements Serializable{
 
 	private static final long serialVersionUID = 1217102246152910571L;
 
+	private long id;
 	private String name, description;
 	private List<Group> groups;
 	private List<Sport> sports;
 	private double latitude;
 	private double longitude;
 	
-	public Spot(String name, String description, List<Group> groups, List<Sport> sports, double lat, double lng) {
+	public Spot(long id, String name, String description, List<Group> groups, List<Sport> sports, double lat, double lng) {
+		this.id = id;
 		this.name = name;
 		this.description = description;
 		this.groups = groups;
@@ -24,6 +29,26 @@ public class Spot  implements Serializable{
 		this.longitude = lng;
 	}
 	
+	public static Spot createFromJSONObject(JSONObject object) throws JSONException{
+		
+		return new Spot(
+				object.getLong("id"), 
+				object.getString("name"), 
+				object.getString("description"), 
+				null, // FIXME groups of spots
+				null, // FIXME sports of spots
+				object.getDouble("latitude"), 
+				object.getDouble("longitude"));
+	}
+	
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
 	public int getGroupsCount() {
 		return groups.size();
 	}

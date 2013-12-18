@@ -24,10 +24,10 @@ public class StaticDatabase {
 				new Sport("Vôlei"),
 				new Sport("Parkour"));
 		spots  = Arrays.asList(
-				new Spot("Estádio de Esportes UFBA", "Um spot qualquer", groups, sports, -12.971111, -38.510833),
-				new Spot("Parque Foo", "Um spot qualquer", groups, sports, -12.971111, -38.510833),
-				new Spot("Praça Orlástica", "Um spot qualquer", groups, sports, -12.971111, -38.510833),
-				new Spot("Lugar para praticar esportes", "Um spot qualquer", groups, sports, -12.971111, -38.510833));
+				new Spot(1, "Estádio de Esportes UFBA", "Um spot qualquer", groups, sports, -12.971111, -38.510833),
+				new Spot(2, "Parque Foo", "Um spot qualquer", groups, sports, -12.971111, -38.510833),
+				new Spot(3, "Praça Orlástica", "Um spot qualquer", groups, sports, -12.971111, -38.510833),
+				new Spot(4, "Lugar para praticar esportes", "Um spot qualquer", groups, sports, -12.971111, -38.510833));
 		groups = Arrays.asList(
 				new Group("Carcará", "Um grupo qualquer", users, spots, sports.get(0)),
 				new Group("Chacal", "Um grupo qualquer", users, spots, sports.get(0)),
