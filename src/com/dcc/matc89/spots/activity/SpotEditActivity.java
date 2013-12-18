@@ -7,6 +7,8 @@ import com.dcc.matc89.spots.R;
 import com.dcc.matc89.spots.model.Sport;
 import com.dcc.matc89.spots.model.Spot;
 import com.dcc.matc89.spots.model.StaticDatabase;
+import com.dcc.matc89.spots.network.FetchSports;
+import com.dcc.matc89.spots.network.FetchSports.OnSportsReceiver;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -17,6 +19,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -25,7 +28,7 @@ import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 
-//Para que a ActionBar funcione em todas as vers›es Ž necess‡rio estender ActionBarActivity ao invŽs de Activity
+//Para que a ActionBar funcione em todas as versï¿½es ï¿½ necessï¿½rio estender ActionBarActivity ao invï¿½s de Activity
 public class SpotEditActivity extends ActionBarActivity {
 		
 	private Spot mSpot;
@@ -46,9 +49,7 @@ public class SpotEditActivity extends ActionBarActivity {
 		mSport = (Spinner) findViewById(R.id.spn_editspot_sport);
 		mPics = (Spinner) findViewById(R.id.spn_editspot_pics);
 		
-		List<Sport> sports = getAllSports();
-		SpinnerAdapter sportsAdapter = new ArrayAdapter<Sport>(this, android.R.layout.simple_spinner_item, sports);
-		mSport.setAdapter(sportsAdapter);
+		new FetchSports().getSports(onSportsReceiver);
 		
 		List<String> pictures = Arrays.asList("Pictures", "Add More", "Feature still to come");
 		SpinnerAdapter picsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, pictures);
@@ -82,8 +83,18 @@ public class SpotEditActivity extends ActionBarActivity {
 			//TODO check map unloading for possible memory leaks.
 	}
 	
-	private List<Sport> getAllSports() {
-		return StaticDatabase.getSingleton().getSports();
+	private OnSportsReceiver onSportsReceiver = new OnSportsReceiver() {
+		
+		@Override
+		public void onSportsReceived(List<Sport> sports) {
+			setupSportSpinner(sports);
+			findViewById(R.id.pgs_sports).setVisibility(View.INVISIBLE);
+		}
+	};
+
+	private void setupSportSpinner(List<Sport> sports) {
+		SpinnerAdapter sportsAdapter = new ArrayAdapter<Sport>(this, android.R.layout.simple_spinner_item, sports);
+		mSport.setAdapter(sportsAdapter);
 	}
 
 	/**

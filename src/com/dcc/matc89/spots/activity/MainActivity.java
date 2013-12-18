@@ -1,6 +1,9 @@
 package com.dcc.matc89.spots.activity;
 
+import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -26,12 +29,14 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
+import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.MarkerOptionsCreator;
 
-// Para que a ActionBar funcione em todas as vers�es � necess�rio estender ActionBarActivity ao inv�s de Activity
+// Para que a ActionBar funcione em todas as vers���es ��� necess���rio estender ActionBarActivity ao inv���s de Activity
 public class MainActivity extends ActionBarActivity implements
 		GooglePlayServicesClient.ConnectionCallbacks,
 		GooglePlayServicesClient.OnConnectionFailedListener {
@@ -41,6 +46,7 @@ public class MainActivity extends ActionBarActivity implements
 	private SupportMapFragment mapFragment;
 	private GoogleMap map;
 	private Location mCurrentLocation;
+	private Map<Marker,Spot> mMarkerSpot;
 	
 
 	@Override
@@ -198,12 +204,24 @@ public class MainActivity extends ActionBarActivity implements
 
 	private void createMarkersFromSpots(List<Spot> spots) {
 		if(map != null){
+			mMarkerSpot = new HashMap<Marker, Spot>(spots.size());
 			for(Spot spot : spots){
-				map.addMarker(new MarkerOptions()
+				mMarkerSpot.put(map.addMarker(new MarkerOptions()
 						.position(new LatLng(spot.getLatitude(), spot.getLongitude()))
 						.title(spot.getName())
-						.snippet(spot.getDescription()));
+						.snippet(spot.getDescription())), spot);
 			}
+			map.setOnInfoWindowClickListener(onInfoWindowClickListener);
 		}
 	}
+
+	private OnInfoWindowClickListener onInfoWindowClickListener = new OnInfoWindowClickListener() {
+		
+		@Override
+		public void onInfoWindowClick(Marker marker) {
+			Intent i = new Intent(MainActivity.this, SpotDetailActivity.class);
+			i.putExtra(SpotDetailActivity.SPOT_KEY, (Serializable) mMarkerSpot.get(marker));
+			startActivity(i);
+		}
+	};
 }

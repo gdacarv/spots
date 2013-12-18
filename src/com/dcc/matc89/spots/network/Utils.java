@@ -11,4 +11,16 @@ public class Utils {
 			s.close();
 		}
 	}
+
+	public static String getUrl(String url, String[] params) {
+		if(params == null || params.length == 0)
+			return url;
+		StringBuilder builder = new StringBuilder(url).append('?');
+		for(int i = 0; i < params.length-1; i+=2){
+			if(i > 0)
+				builder.append('&');
+			builder.append(params[i]).append('=').append(params[i+1]);
+		}
+		return builder.toString();
+	}
 }

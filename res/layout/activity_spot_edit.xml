@@ -28,10 +28,23 @@
         android:lines="3"
         android:hint="@string/description" />
 
-    <Spinner
-        android:id="@+id/spn_editspot_sport"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <LinearLayout android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+	    <Spinner
+	        android:id="@+id/spn_editspot_sport"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:entries="@array/spinner_loading" />
+	    
+	    <ProgressBar 
+	        android:id="@+id/pgs_sports"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        style="@android:style/Widget.ProgressBar.Small"
+	        android:layout_gravity="center_vertical"/>
+    
+    </LinearLayout>
     
     <fragment
 		android:id="@+id/mapSpotEdit"

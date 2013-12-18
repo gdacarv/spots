@@ -17,21 +17,21 @@ public class StaticDatabase {
 	public StaticDatabase() {
 		groupsId = Arrays.asList(Long.valueOf(1), Long.valueOf(2), Long.valueOf(3), Long.valueOf(4));
 		users = Arrays.asList(
-				new User("João", "Salvador - BA", "1203029403293", groups),
+				new User("Joï¿½o", "Salvador - BA", "1203029403293", groups),
 				new User("Jose", "Salvador - BA", "1203029403293", groups),
 				new User("Joaquim", "Salvador - BA", "1203029403293", groups),
 				new User("Jorge", "Salvador - BA", "1203029403293", groups));
 		sports = Arrays.asList(
-				new Sport("Basquete"),
-				new Sport("Vôlei"),
-				new Sport("Parkour"));
+				new Sport(1, "Basquete"),
+				new Sport(2, "VÃ´lei"),
+				new Sport(3, "Parkour"));
 		spots  = Arrays.asList(
-				new Spot(1, "Estádio de Esportes UFBA", "Um spot qualquer", groupsId, sports, -12.971111, -38.510833),
+				new Spot(1, "Estï¿½dio de Esportes UFBA", "Um spot qualquer", groupsId, sports, -12.971111, -38.510833),
 				new Spot(2, "Parque Foo", "Um spot qualquer", groupsId, sports, -12.971111, -38.510833),
-				new Spot(3, "Praça Orlástica", "Um spot qualquer", groupsId, sports, -12.971111, -38.510833),
+				new Spot(3, "Praï¿½a Orlï¿½stica", "Um spot qualquer", groupsId, sports, -12.971111, -38.510833),
 				new Spot(4, "Lugar para praticar esportes", "Um spot qualquer", groupsId, sports, -12.971111, -38.510833));
 		groups = Arrays.asList(
-				new Group("Carcará", "Um grupo qualquer", users, spots, sports.get(0)),
+				new Group("Carcarï¿½", "Um grupo qualquer", users, spots, sports.get(0)),
 				new Group("Chacal", "Um grupo qualquer", users, spots, sports.get(0)),
 				new Group("Cutia", "Um grupo qualquer", users, spots, sports.get(0)),
 				new Group("Limite Radical", "Um grupo qualquer", users, spots, sports.get(0)));
@@ -40,12 +40,12 @@ public class StaticDatabase {
 			spots.get(i).setGroupsId(groupsId);
 		}
 		setSports(Arrays.asList(
-				new Sport("Vôlei"),
-				new Sport("Futebol"),
-				new Sport("Baquete"),
-				new Sport("Slackline"),
-				new Sport("Escalada"),
-				new Sport("Parkour"))
+				new Sport(2, "VÃ´lei"),
+				new Sport(4, "Futebol"),
+				new Sport(1, "Basquete"),
+				new Sport(5, "Slackline"),
+				new Sport(6, "Escalada"),
+				new Sport(3, "Parkour"))
 				);
 	}
 	

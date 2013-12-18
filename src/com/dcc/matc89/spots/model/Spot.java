@@ -1,8 +1,10 @@
 package com.dcc.matc89.spots.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -30,13 +32,21 @@ public class Spot  implements Serializable{
 	}
 	
 	public static Spot createFromJSONObject(JSONObject object) throws JSONException{
+		JSONArray groupsArray = object.getJSONArray("groups");
+		List<Long> groups = new ArrayList<Long>(groupsArray.length());
+		for(int i = 0; i < groupsArray.length(); i++)
+			groups.add(groupsArray.getLong(i));
+		JSONArray sportsArray = object.getJSONArray("sports");
+		List<Sport> sports = new ArrayList<Sport>(sportsArray.length());
+		for(int i = 0; i < sportsArray.length(); i++)
+			sports.add(Sport.createFromJSONObject(sportsArray.getJSONObject(i)));
 		
 		return new Spot(
 				object.getLong("id"), 
 				object.getString("name"), 
 				object.getString("description"), 
-				null, // FIXME groups of spots
-				null, // FIXME sports of spots
+				groups,
+				sports,
 				object.getDouble("latitude"), 
 				object.getDouble("longitude"));
 	}

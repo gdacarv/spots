@@ -35,5 +35,8 @@
     <string name="title_activity_user_detail">Profile</string>
     <string name="title_activity_user_list">Users</string>
     <string name="users_">Users:</string>
+    <string-array name="spinner_loading">
+        <item>Loading...</item>
+    </string-array>
 
 </resources>

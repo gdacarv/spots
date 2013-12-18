@@ -11,51 +11,51 @@ import org.json.JSONArray;
 
 import android.os.AsyncTask;
 
-import com.dcc.matc89.spots.model.Spot;
-import com.dcc.matc89.spots.network.FetchSpots.OnSpotsReceiver;
+import com.dcc.matc89.spots.model.Sport;
+import com.dcc.matc89.spots.network.FetchSports.OnSportsReceiver;
 
-class FetchSpotsAsyncTask extends AsyncTask<String, Void, List<Spot>> {
+class FetchSportsAsyncTask extends AsyncTask<String, Void, List<Sport>> {
 
-	private static final String URL = "http://matc89spots.appspot.com/api/spots";
+	private static final String URL = "http://matc89spots.appspot.com/api/sports";
 
-	private OnSpotsReceiver mReceiver;
-	private List<Spot> mSpots;
+	private OnSportsReceiver mReceiver;
+	private List<Sport> mSports;
 
 
-	public FetchSpotsAsyncTask(OnSpotsReceiver receiver) {
+	public FetchSportsAsyncTask(OnSportsReceiver receiver) {
 		mReceiver = receiver;
 	}
 
 	@Override
-	protected List<Spot> doInBackground(String... params) {
+	protected List<Sport> doInBackground(String... params) {
 		if(params != null && params.length % 2 == 1)
 			throw new InvalidParameterException("Parameters should be in pairs. Key and value.");
-		mSpots = new ArrayList<Spot>();
+		mSports = new ArrayList<Sport>();
 		try {
 			URL url = new URL(Utils.getUrl(URL, params));
 			HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
 			InputStream inputStream = urlConnection.getInputStream();
 			try {
 				String data = Utils.convertInputStreamToString(inputStream);
-				JSONArray spots = new JSONArray(data);
-				for(int i = 0; i < spots.length(); i++)
-					mSpots.add(Spot.createFromJSONObject(spots.getJSONObject(i)));
+				JSONArray sports = new JSONArray(data);
+				for(int i = 0; i < sports.length(); i++)
+					mSports.add(Sport.createFromJSONObject(sports.getJSONObject(i)));
 			} finally {
 				if(inputStream != null)
 					inputStream.close();
 				urlConnection.disconnect();
 			}
-			return mSpots;
+			return mSports;
 		} catch (Exception e) {
 			e.printStackTrace();
 		} 
-		return mSpots;
+		return mSports;
 	}
 
 	@Override
-	protected void onPostExecute(List<Spot> result) {
+	protected void onPostExecute(List<Sport> result) {
 		super.onPostExecute(result);
-		mReceiver.onSpotsReceived(result);
+		mReceiver.onSportsReceived(result);
 	}
 
 
