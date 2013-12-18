@@ -14,16 +14,16 @@ public class Spot  implements Serializable{
 
 	private long id;
 	private String name, description;
-	private List<Group> groups;
+	private List<Long> groupsId;
 	private List<Sport> sports;
 	private double latitude;
 	private double longitude;
 	
-	public Spot(long id, String name, String description, List<Group> groups, List<Sport> sports, double lat, double lng) {
+	public Spot(long id, String name, String description, List<Long> groups, List<Sport> sports, double lat, double lng) {
 		this.id = id;
 		this.name = name;
 		this.description = description;
-		this.groups = groups;
+		this.groupsId = groups;
 		this.sports = sports;
 		this.latitude = lat;
 		this.longitude = lng;
@@ -50,7 +50,7 @@ public class Spot  implements Serializable{
 	}
 
 	public int getGroupsCount() {
-		return groups.size();
+		return groupsId.size();
 	}
 
 	public String getName() {
@@ -67,21 +67,17 @@ public class Spot  implements Serializable{
 		return description;
 	}
 
-
 	public void setDescription(String description) {
 		this.description = description;
 	}
 
-
-	public List<Group> getGroups() {
-		return groups;
+	public List<Long> getGroupsIds() {
+		return groupsId;
 	}
 
-
-	public void setGroups(List<Group> groups) {
-		this.groups = groups;
+	public void setGroupsId(List<Long> groupsId) {
+		this.groupsId = groupsId;
 	}
-
 
 	public List<Sport> getSports() {
 		return sports;

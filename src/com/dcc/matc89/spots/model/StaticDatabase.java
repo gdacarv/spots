@@ -9,11 +9,13 @@ public class StaticDatabase {
 	private static StaticDatabase singleton = new StaticDatabase();
 	
 	private List<Group> groups = new ArrayList<Group>();
+	private List<Long> groupsId;
 	private List<User> users;
 	private List<Sport> sports;
 	private List<Spot> spots;
 
 	public StaticDatabase() {
+		groupsId = Arrays.asList(Long.valueOf(1), Long.valueOf(2), Long.valueOf(3), Long.valueOf(4));
 		users = Arrays.asList(
 				new User("João", "Salvador - BA", "1203029403293", groups),
 				new User("Jose", "Salvador - BA", "1203029403293", groups),
@@ -24,10 +26,10 @@ public class StaticDatabase {
 				new Sport("Vôlei"),
 				new Sport("Parkour"));
 		spots  = Arrays.asList(
-				new Spot(1, "Estádio de Esportes UFBA", "Um spot qualquer", groups, sports, -12.971111, -38.510833),
-				new Spot(2, "Parque Foo", "Um spot qualquer", groups, sports, -12.971111, -38.510833),
-				new Spot(3, "Praça Orlástica", "Um spot qualquer", groups, sports, -12.971111, -38.510833),
-				new Spot(4, "Lugar para praticar esportes", "Um spot qualquer", groups, sports, -12.971111, -38.510833));
+				new Spot(1, "Estádio de Esportes UFBA", "Um spot qualquer", groupsId, sports, -12.971111, -38.510833),
+				new Spot(2, "Parque Foo", "Um spot qualquer", groupsId, sports, -12.971111, -38.510833),
+				new Spot(3, "Praça Orlástica", "Um spot qualquer", groupsId, sports, -12.971111, -38.510833),
+				new Spot(4, "Lugar para praticar esportes", "Um spot qualquer", groupsId, sports, -12.971111, -38.510833));
 		groups = Arrays.asList(
 				new Group("Carcará", "Um grupo qualquer", users, spots, sports.get(0)),
 				new Group("Chacal", "Um grupo qualquer", users, spots, sports.get(0)),
@@ -35,7 +37,7 @@ public class StaticDatabase {
 				new Group("Limite Radical", "Um grupo qualquer", users, spots, sports.get(0)));
 		for (int i = 0; i < 4; i = i+1) {
 			users.get(i).setGroups(groups);
-			spots.get(i).setGroups(groups);
+			spots.get(i).setGroupsId(groupsId);
 		}
 		setSports(Arrays.asList(
 				new Sport("Vôlei"),
