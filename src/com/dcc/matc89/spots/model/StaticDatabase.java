@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.dcc.matc89.spots.network.PostSpots;
+import com.dcc.matc89.spots.network.PostSpots.OnSpotsReceiver;
+
 public class StaticDatabase {
 	
 	private static StaticDatabase singleton = new StaticDatabase();
@@ -17,10 +20,10 @@ public class StaticDatabase {
 	public StaticDatabase() {
 		groupsId = Arrays.asList(Long.valueOf(1), Long.valueOf(2), Long.valueOf(3), Long.valueOf(4));
 		users = Arrays.asList(
-				new User("Jo�o", "Salvador - BA", "1203029403293", groups),
-				new User("Jose", "Salvador - BA", "1203029403293", groups),
-				new User("Joaquim", "Salvador - BA", "1203029403293", groups),
-				new User("Jorge", "Salvador - BA", "1203029403293", groups));
+				new User(1, "Jo�o", "Salvador - BA", null, "1203029403293", groupsId),
+				new User(2, "Jose", "Salvador - BA", null, "1203029403293", groupsId),
+				new User(3, "Joaquim", "Salvador - BA", "1203029403293", null, groupsId),
+				new User(4, "Jorge", "Salvador - BA", "1203029403293", null, groupsId));
 		sports = Arrays.asList(
 				new Sport(1, "Basquete"),
 				new Sport(2, "Vôlei"),
@@ -31,14 +34,10 @@ public class StaticDatabase {
 				new Spot(3, "Pra�a Orl�stica", "Um spot qualquer", groupsId, sports, -12.971111, -38.510833),
 				new Spot(4, "Lugar para praticar esportes", "Um spot qualquer", groupsId, sports, -12.971111, -38.510833));
 		groups = Arrays.asList(
-				new Group("Carcar�", "Um grupo qualquer", users, spots, sports.get(0)),
-				new Group("Chacal", "Um grupo qualquer", users, spots, sports.get(0)),
-				new Group("Cutia", "Um grupo qualquer", users, spots, sports.get(0)),
-				new Group("Limite Radical", "Um grupo qualquer", users, spots, sports.get(0)));
-		for (int i = 0; i < 4; i = i+1) {
-			users.get(i).setGroups(groups);
-			spots.get(i).setGroupsId(groupsId);
-		}
+				new Group(1, "Carcar�", "Um grupo qualquer", groupsId, groupsId, sports.get(0)),
+				new Group(2, "Chacal", "Um grupo qualquer", groupsId, groupsId, sports.get(0)),
+				new Group(3, "Cutia", "Um grupo qualquer", groupsId, groupsId, sports.get(0)),
+				new Group(4, "Limite Radical", "Um grupo qualquer", groupsId, groupsId, sports.get(0)));
 		setSports(Arrays.asList(
 				new Sport(2, "Vôlei"),
 				new Sport(4, "Futebol"),
@@ -47,6 +46,13 @@ public class StaticDatabase {
 				new Sport(6, "Escalada"),
 				new Sport(3, "Parkour"))
 				);
+		OnSpotsReceiver receiver = new OnSpotsReceiver(){
+			@Override
+			public void onSpotsReceived(Spot spot){}
+		};
+		for (int i = 0; i < 4; i++){
+			new PostSpots().newSpot(receiver, spots.get(i), 1);
+		}
 	}
 	
 	public static StaticDatabase getSingleton(){

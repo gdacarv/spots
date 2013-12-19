@@ -145,9 +145,8 @@ public class SpotDetailActivity extends ActionBarActivity {
 		
 		@Override
 		public void onClick(View v) {
-			//TODO pass this spot's data to group list.
 			Intent i = new Intent(SpotDetailActivity.this, GroupListActivity.class);
-			//i.putExtra(GroupListActivity.SPOT_KEY, mSpot);
+			i.putExtra(GroupListActivity.SPOT_KEY, mSpot);
 			startActivity(i);
 		}
 	};

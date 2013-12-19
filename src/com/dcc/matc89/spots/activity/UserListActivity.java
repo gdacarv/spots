@@ -23,7 +23,12 @@ import android.widget.TextView;
 
 import com.dcc.matc89.spots.R;
 import com.dcc.matc89.spots.model.Group;
+import com.dcc.matc89.spots.model.Spot;
 import com.dcc.matc89.spots.model.User;
+import com.dcc.matc89.spots.network.FetchSpots;
+import com.dcc.matc89.spots.network.FetchSpots.OnSpotsReceiver;
+import com.dcc.matc89.spots.network.FetchUsers;
+import com.dcc.matc89.spots.network.FetchUsers.OnUsersReceiver;
 
 public class UserListActivity extends ActionBarActivity {
 
@@ -34,6 +39,8 @@ public class UserListActivity extends ActionBarActivity {
 	private ListView mListView;
 	
 	private Group mGroup;
+
+	protected List<User> mUsers;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -53,12 +60,19 @@ public class UserListActivity extends ActionBarActivity {
 		loadUsersAsync();
 	}
 
+	private OnUsersReceiver receiver = new OnUsersReceiver() {
+		@Override
+		public void onUsersReceived(List<User> users) {
+			mUsers = users;
+		}
+	};
+	
 	/** This method have to load the users. This can takes as long as it need (ie. You can do network requests here). */
 	private List<User> loadUsersSync() {
 		// TODO Get from WEB API OR from Group object
-		SystemClock.sleep(3000); // Simulates web request. Remove when use real WEB API
-		
-		return mGroup.getUsers();
+		//SystemClock.sleep(3000); // Simulates web request. Remove when use real WEB API
+		new FetchUsers().getUsers(receiver, mGroup.getId());
+		return mUsers;
 	}
 
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)

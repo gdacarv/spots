@@ -23,15 +23,19 @@ import android.widget.TextView;
 
 import com.dcc.matc89.spots.R;
 import com.dcc.matc89.spots.model.Group;
+import com.dcc.matc89.spots.model.Spot;
 import com.dcc.matc89.spots.model.StaticDatabase;
 
 public class GroupListActivity extends ActionBarActivity {
 
 	private static final int CODE_ADD_GROUP = 1;
+	public static final String SPOT_KEY = "spot_key";
 	
 	private TextView mTextEmpty;
 	private View mProgressLoading;
 	private ListView mListView;
+	
+	private Spot mSpot;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +46,9 @@ public class GroupListActivity extends ActionBarActivity {
 		mProgressLoading = findViewById(R.id.pgs_groups);
 		mListView = (ListView) findViewById(R.id.list);
 		mListView.setOnItemClickListener(onItemClickListener);
+		
+		mSpot = (Spot) getIntent().getSerializableExtra(SPOT_KEY);
+		
 		// Show the Up button in the action bar.
 		setupActionBar();
 		

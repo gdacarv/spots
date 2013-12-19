@@ -24,6 +24,8 @@ import android.widget.TextView;
 import com.dcc.matc89.spots.R;
 import com.dcc.matc89.spots.model.Group;
 import com.dcc.matc89.spots.model.Spot;
+import com.dcc.matc89.spots.network.FetchSpots;
+import com.dcc.matc89.spots.network.FetchSpots.OnSpotsReceiver;
 
 public class SpotListActivity extends ActionBarActivity {
 
@@ -34,6 +36,7 @@ public class SpotListActivity extends ActionBarActivity {
 	private ListView mListView;
 	
 	private Group mGroup;
+	protected List<Spot> mSpots;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -50,24 +53,25 @@ public class SpotListActivity extends ActionBarActivity {
 		// Show the Up button in the action bar.
 		setupActionBar();
 		
-		loadSpotsAsync();
+		loadSpots();
 	}
 
+	private OnSpotsReceiver receiver = new OnSpotsReceiver() {
+		@Override
+		public void onSpotsReceived(List<Spot> result) {
+			mProgressLoading.setVisibility(View.INVISIBLE);
+			if(result == null || result.isEmpty())
+				mTextEmpty.setVisibility(View.VISIBLE);
+			else{
+				ListAdapter adapter = new ArrayAdapter<Spot>(SpotListActivity.this, android.R.layout.simple_list_item_1, result);
+				mListView.setAdapter(adapter);
+			}
+		}
+	};
+	
 	/** This method have to load the users. This can takes as long as it need (ie. You can do network requests here). */
-	private List<Spot> loadSpotsSync() {
-		// TODO Get from WEB API OR from Group object
-		SystemClock.sleep(3000); // Simulates web request. Remove when use real WEB API
-		
-		return mGroup.getSpots();
-	}
-
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
-	private void loadSpotsAsync() {
-		AsyncTask<Void, Void, List<Spot>> task = new SpotLoadAsyncTask();
-		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
-			task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-		else
-			task.execute();
+	private void loadSpots() {
+		new FetchSpots().getSpots(receiver, mGroup.getId());
 	}
 
 	/**
@@ -79,8 +83,6 @@ public class SpotListActivity extends ActionBarActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		//TODO change to spot_list
 		getMenuInflater().inflate(R.menu.spot_list, menu);
 		return true;
 	}
@@ -113,25 +115,4 @@ public class SpotListActivity extends ActionBarActivity {
 			startActivity(i);
 		}
 	};
-
-	private class SpotLoadAsyncTask extends AsyncTask<Void, Void, List<Spot>> {
-		
-		@Override
-		protected List<Spot> doInBackground(Void... params) {
-			List<Spot> spots = loadSpotsSync();
-			return spots;
-		}
-		
-		@Override
-		protected void onPostExecute(List<Spot> result) {
-			super.onPostExecute(result);
-			mProgressLoading.setVisibility(View.INVISIBLE);
-			if(result == null || result.isEmpty())
-				mTextEmpty.setVisibility(View.VISIBLE);
-			else{
-				ListAdapter adapter = new ArrayAdapter<Spot>(SpotListActivity.this, android.R.layout.simple_list_item_1, result);
-				mListView.setAdapter(adapter);
-			}
-		}
-	}
 }
