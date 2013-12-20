@@ -24,7 +24,7 @@ public class FetchGroups {
 	}
 
 	public void getGroupsFromSpot(OnGroupsReceiver receiver, long fromSpot) {
-		String params[] = {"fromUser", String.valueOf(fromSpot)};
+		String params[] = {"fromSpot", String.valueOf(fromSpot)};
 		fetchGroups(receiver, params);
 	}
 

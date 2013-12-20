@@ -40,7 +40,6 @@ public class UserListActivity extends ActionBarActivity {
 	
 	private Group mGroup;
 
-	protected List<User> mUsers;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -57,31 +56,18 @@ public class UserListActivity extends ActionBarActivity {
 		// Show the Up button in the action bar.
 		setupActionBar();
 		
-		loadUsersAsync();
+		loadUsers();
 	}
 
-	private OnUsersReceiver receiver = new OnUsersReceiver() {
+	private OnUsersReceiver onUsersReceiver = new OnUsersReceiver() {
 		@Override
 		public void onUsersReceived(List<User> users) {
-			mUsers = users;
+			showUsers(users);
 		}
 	};
 	
-	/** This method have to load the users. This can takes as long as it need (ie. You can do network requests here). */
-	private List<User> loadUsersSync() {
-		// TODO Get from WEB API OR from Group object
-		//SystemClock.sleep(3000); // Simulates web request. Remove when use real WEB API
-		new FetchUsers().getUsers(receiver, mGroup.getId());
-		return mUsers;
-	}
-
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
-	private void loadUsersAsync() {
-		AsyncTask<Void, Void, List<User>> task = new UserLoadAsyncTask();
-		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
-			task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-		else
-			task.execute();
+	private void loadUsers() {
+		new FetchUsers().getUsers(onUsersReceiver, mGroup.getId());
 	}
 
 	/**
@@ -115,36 +101,24 @@ public class UserListActivity extends ActionBarActivity {
 		return super.onOptionsItemSelected(item);
 	}
 	
+	private void showUsers(List<User> result) {
+		mProgressLoading.setVisibility(View.INVISIBLE);
+		if(result == null || result.isEmpty())
+			mTextEmpty.setVisibility(View.VISIBLE);
+		else{
+			ListAdapter adapter = new ArrayAdapter<User>(UserListActivity.this, android.R.layout.simple_list_item_1, result);
+			mListView.setAdapter(adapter);
+		}
+	}
+
 	private OnItemClickListener onItemClickListener = new OnItemClickListener() {
 
 		@Override
 		public void onItemClick(AdapterView<?> adapterView, View view, int position,
 				long id) {
-			// TODO Send user o UserDetail (profile) activity
 			Intent i = new Intent(UserListActivity.this, UserDetailActivity.class);
 			i.putExtra(UserDetailActivity.USER_KEY, (Serializable) adapterView.getAdapter().getItem(position));
 			startActivity(i);
 		}
 	};
-
-	private class UserLoadAsyncTask extends AsyncTask<Void, Void, List<User>> {
-		
-		@Override
-		protected List<User> doInBackground(Void... params) {
-			List<User> users = loadUsersSync();
-			return users;
-		}
-		
-		@Override
-		protected void onPostExecute(List<User> result) {
-			super.onPostExecute(result);
-			mProgressLoading.setVisibility(View.INVISIBLE);
-			if(result == null || result.isEmpty())
-				mTextEmpty.setVisibility(View.VISIBLE);
-			else{
-				ListAdapter adapter = new ArrayAdapter<User>(UserListActivity.this, android.R.layout.simple_list_item_1, result);
-				mListView.setAdapter(adapter);
-			}
-		}
-	}
 }

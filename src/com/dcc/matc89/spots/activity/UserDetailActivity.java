@@ -19,7 +19,7 @@ public class UserDetailActivity extends ActionBarActivity {
 	private TextView mName;
 	private TextView mLocation;
 	private TextView mGroupsAmount;
-	private User mData;
+	private User mUser;
 	private View mGroupsButton;
 	
 	@Override
@@ -35,13 +35,13 @@ public class UserDetailActivity extends ActionBarActivity {
 		mGroupsAmount = (TextView) findViewById(R.id.groups_text);
 		mGroupsButton = findViewById(R.id.groups_button);
 		
-		mData = (User) getIntent().getSerializableExtra(USER_KEY);
+		mUser = (User) getIntent().getSerializableExtra(USER_KEY);
 		
-		// TODO Grab Profile pic from facebook
+		// TODO Grab Profile pic from facebook or Google Plus
 		mProfilePicture.setImageDrawable(getResources().getDrawable(R.drawable.ic_contact_picture_2));
-		mName.setText(mData.getName());
-		mLocation.setText(mData.getLocation());
-		mGroupsAmount.setText(String.valueOf(mData.getGroups().size()));
+		mName.setText(mUser.getName());
+		mLocation.setText(mUser.getLocation());
+		mGroupsAmount.setText(String.valueOf(mUser.getGroups().size()));
 		mGroupsButton.setOnClickListener(onGroupClicked);
 	}
 	
@@ -49,9 +49,9 @@ public class UserDetailActivity extends ActionBarActivity {
 
 		@Override
 		public void onClick(View v) {
-			// TODO actually pass this user's list
-			Intent i2 = new Intent(UserDetailActivity.this, GroupListActivity.class);
-			startActivity(i2);
+			Intent i = new Intent(UserDetailActivity.this, GroupListActivity.class);
+			i.putExtra(GroupListActivity.USER_KEY, mUser);
+			startActivity(i);
 		}
 		
 	};

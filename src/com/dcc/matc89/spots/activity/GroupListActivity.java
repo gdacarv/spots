@@ -3,12 +3,8 @@ package com.dcc.matc89.spots.activity;
 import java.io.Serializable;
 import java.util.List;
 
-import android.annotation.TargetApi;
 import android.content.Intent;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -24,18 +20,22 @@ import android.widget.TextView;
 import com.dcc.matc89.spots.R;
 import com.dcc.matc89.spots.model.Group;
 import com.dcc.matc89.spots.model.Spot;
-import com.dcc.matc89.spots.model.StaticDatabase;
+import com.dcc.matc89.spots.model.User;
+import com.dcc.matc89.spots.network.FetchGroups;
+import com.dcc.matc89.spots.network.FetchGroups.OnGroupsReceiver;
 
 public class GroupListActivity extends ActionBarActivity {
 
 	private static final int CODE_ADD_GROUP = 1;
 	public static final String SPOT_KEY = "spot_key";
+	public static final String USER_KEY = "user_key";
 	
 	private TextView mTextEmpty;
 	private View mProgressLoading;
 	private ListView mListView;
 	
 	private Spot mSpot;
+	private User mUser;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -46,29 +46,14 @@ public class GroupListActivity extends ActionBarActivity {
 		mProgressLoading = findViewById(R.id.pgs_groups);
 		mListView = (ListView) findViewById(R.id.list);
 		mListView.setOnItemClickListener(onItemClickListener);
-		
+
 		mSpot = (Spot) getIntent().getSerializableExtra(SPOT_KEY);
+		mUser = (User) getIntent().getSerializableExtra(USER_KEY);
 		
 		// Show the Up button in the action bar.
 		setupActionBar();
 		
-		loadGroupsAsync();
-	}
-
-	/** This method have to load the groups of current user. This can takes as long as it need (ie. You can do network requests here). */
-	private List<Group> loadGroupsSync() {
-		// TODO Get from WEB API
-		SystemClock.sleep(3000); // Simulates web request. Remove when use real WEB API
-		return StaticDatabase.getSingleton().getGroups();
-	}
-
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
-	private void loadGroupsAsync() {
-		AsyncTask<Void, Void, List<Group>> task = new GroupLoadAsyncTask();
-		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
-			task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-		else
-			task.execute();
+		loadGroups();
 	}
 
 	/**
@@ -112,7 +97,7 @@ public class GroupListActivity extends ActionBarActivity {
 			// TODO Reload list
 		}
 	}
-	
+
 	private OnItemClickListener onItemClickListener = new OnItemClickListener() {
 
 		@Override
@@ -123,25 +108,31 @@ public class GroupListActivity extends ActionBarActivity {
 			startActivity(i);
 		}
 	};
-
-	private class GroupLoadAsyncTask extends AsyncTask<Void, Void, List<Group>> {
-		
-		@Override
-		protected List<Group> doInBackground(Void... params) {
-			List<Group> groups = loadGroupsSync();
-			return groups;
-		}
-		
-		@Override
-		protected void onPostExecute(List<Group> result) {
-			super.onPostExecute(result);
-			mProgressLoading.setVisibility(View.INVISIBLE);
-			if(result == null || result.isEmpty())
-				mTextEmpty.setVisibility(View.VISIBLE);
-			else{
-				ListAdapter adapter = new ArrayAdapter<Group>(GroupListActivity.this, android.R.layout.simple_list_item_1, result);
-				mListView.setAdapter(adapter);
-			}
+	
+	private void showGroups(List<Group> result) {
+		mProgressLoading.setVisibility(View.INVISIBLE);
+		if(result == null || result.isEmpty())
+			mTextEmpty.setVisibility(View.VISIBLE);
+		else{
+			ListAdapter adapter = new ArrayAdapter<Group>(GroupListActivity.this, android.R.layout.simple_list_item_1, result);
+			mListView.setAdapter(adapter);
 		}
 	}
+
+	private void loadGroups() {
+		if(mSpot != null){
+			new FetchGroups().getGroupsFromSpot(onGroupsReceiver, mSpot.getId());
+		} else if(mUser != null){
+			new FetchGroups().getGroupsFromUser(onGroupsReceiver, mUser.getId());
+		}
+	}
+	
+	private OnGroupsReceiver onGroupsReceiver = new OnGroupsReceiver() {
+		
+		@Override
+		public void onGroupsReceived(List<Group> groups) {
+			showGroups(groups);
+		}
+	};
+
 }
