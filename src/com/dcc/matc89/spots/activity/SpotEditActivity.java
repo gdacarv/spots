@@ -1,8 +1,10 @@
 package com.dcc.matc89.spots.activity;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -14,21 +16,32 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dcc.matc89.spots.R;
+import com.dcc.matc89.spots.model.Group;
 import com.dcc.matc89.spots.model.Sport;
 import com.dcc.matc89.spots.model.Spot;
+import com.dcc.matc89.spots.model.User;
 import com.dcc.matc89.spots.network.FetchSports;
 import com.dcc.matc89.spots.network.FetchSports.OnSportsReceiver;
+import com.dcc.matc89.spots.network.PostSpots;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 //Para que a ActionBar funcione em todas as vers�es � necess�rio estender ActionBarActivity ao inv�s de Activity
 public class SpotEditActivity extends LoginActionBarActivity {
 		
-	private Spot mSpot;
 	private Spinner mSport, mPics;
 	private ImageView mapImage;
+	private Marker mMarker;
+	private GoogleMap mMap;
+	private TextView mNameText, mDescriptionText;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +54,11 @@ public class SpotEditActivity extends LoginActionBarActivity {
 	}
 
 	private void setupViews() {
+		mNameText = (TextView) findViewById(R.id.txt_editspot_name);
+		mDescriptionText = (TextView) findViewById(R.id.txt_editspot_description);
 		mSport = (Spinner) findViewById(R.id.spn_editspot_sport);
 		mPics = (Spinner) findViewById(R.id.spn_editspot_pics);
+		mPics.setEnabled(false);
 		
 		new FetchSports().getSports(onSportsReceiver);
 		
@@ -50,22 +66,21 @@ public class SpotEditActivity extends LoginActionBarActivity {
 		SpinnerAdapter picsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, pictures);
 		mPics.setAdapter(picsAdapter);
 		
-		//TODO change this to location clicked on main activity before adding spot or to the spot being edited.
-		//mSpot = StaticDatabase.getSingleton().getSpots().get(0);
-		
 		mapImage = (ImageView) findViewById(R.id.mapSnapshotEdit);
 		SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapSpotEdit);
-		final GoogleMap map = mapFragment.getMap();
+		mMap = mapFragment.getMap();
 		
-		if (map != null) {
-			map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+		if (mMap != null) {
+			mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+			mMap.setMyLocationEnabled(true);
+			mMap.setOnMapClickListener(onMapClickListener);
 			//map.addMarker(new MarkerOptions().position(mSpot.getLatLng()));
 			//map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mSpot.getLatitude() + 0.001,mSpot.getLongitude()), 15));
 
 			
-			map.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+			mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
 			    public void onMapLoaded() {
-			        map.snapshot(new GoogleMap.SnapshotReadyCallback() {
+			        mMap.snapshot(new GoogleMap.SnapshotReadyCallback() {
 			            @SuppressWarnings("deprecation")
 						public void onSnapshotReady(Bitmap bitmap) {
 			                mapImage.setAlpha(1);
@@ -122,12 +137,45 @@ public class SpotEditActivity extends LoginActionBarActivity {
 			NavUtils.navigateUpFromSameTask(this);
 			return true;
 		case R.id.action_save:
-			// TODO Send new spot OR update spot to WEB API
-			setResult(RESULT_OK);
-			finish();
+			saveSpot();
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
+
+	private void saveSpot() {
+		String name = mNameText.getText().toString();
+		if(name == null || name.length() == 0){
+			Toast.makeText(this, R.string.you_must_provide_a_name_, Toast.LENGTH_SHORT).show();
+			return;
+		}
+		String description = mDescriptionText.getText().toString();
+		if(description == null || description.length() == 0){
+			Toast.makeText(this, R.string.you_must_provide_a_description_, Toast.LENGTH_SHORT).show();
+			return;
+		}
+		if(mMarker == null){
+			Toast.makeText(this, R.string.click_on_the_map_to_mark_the_spot_s_location_, Toast.LENGTH_SHORT).show();
+			return;
+		}
+		Spot spot = new Spot(-1, name, description, Collections.<Long>emptyList(), Arrays.asList((Sport)mSport.getSelectedItem()), mMarker.getPosition().latitude, mMarker.getPosition().longitude);
+		new PostSpots().newSpot(null, spot, User.getCurrentUser(this).getId());
+		Intent intent = new Intent(this, SpotDetailActivity.class);
+		intent.putExtra(SpotDetailActivity.SPOT_KEY, spot);
+		startActivity(intent);
+		setResult(RESULT_OK);
+		finish();
+	}
+	
+	private OnMapClickListener onMapClickListener = new OnMapClickListener() {
+		
+		@Override
+		public void onMapClick(LatLng arg0) {
+			if(mMarker == null){
+				mMarker = mMap.addMarker(new MarkerOptions().draggable(true).position(arg0));
+			} else
+				mMarker.setPosition(arg0);
+		}
+	};
 
 }

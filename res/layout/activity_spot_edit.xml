@@ -49,7 +49,7 @@
     <fragment
 		android:id="@+id/mapSpotEdit"
 		android:layout_width="wrap_content"
-		android:layout_height="150dp"
+		android:layout_height="300dp"
 		class="com.google.android.gms.maps.SupportMapFragment">
 		<ImageView
 		    android:contentDescription="@string/map_snapshot_description"

@@ -10,17 +10,17 @@ import org.json.JSONObject;
 import android.os.AsyncTask;
 
 import com.dcc.matc89.spots.model.Spot;
-import com.dcc.matc89.spots.network.PostSpots.OnSpotsReceiver;
+import com.dcc.matc89.spots.network.PostSpots.OnSpotReceiver;
 
 class PostSpotsAsyncTask extends AsyncTask<String, Void, Spot> {
 
 	private static final String URL = "http://matc89spots.appspot.com/api/edit_spot";
 
-	private OnSpotsReceiver mReceiver;
+	private OnSpotReceiver mReceiver;
 	private Spot mSpot;
 
 
-	public PostSpotsAsyncTask(OnSpotsReceiver receiver) {
+	public PostSpotsAsyncTask(OnSpotReceiver receiver) {
 		mReceiver = receiver;
 	}
 
@@ -31,6 +31,8 @@ class PostSpotsAsyncTask extends AsyncTask<String, Void, Spot> {
 		try {
 			URL url = new URL(Utils.getUrl(URL, params));
 			HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+			urlConnection.setRequestMethod("POST");
+			urlConnection.setDoOutput(true);
 			InputStream inputStream = urlConnection.getInputStream();
 			try {
 				String data = Utils.convertInputStreamToString(inputStream);
@@ -50,7 +52,8 @@ class PostSpotsAsyncTask extends AsyncTask<String, Void, Spot> {
 	@Override
 	protected void onPostExecute(Spot result) {
 		super.onPostExecute(result);
-		mReceiver.onSpotsReceived(result);
+		if(mReceiver != null)
+			mReceiver.onSpotsReceived(result);
 	}
 
 

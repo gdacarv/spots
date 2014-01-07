@@ -68,7 +68,6 @@ public class MainActivity extends ActionBarActivity implements
 			mLocationClient = new LocationClient(this,this,this);
 		}
 
-		loadSpots();
 	}
 
 	@Override
@@ -76,6 +75,13 @@ public class MainActivity extends ActionBarActivity implements
 		super.onStart();
 		if(mLocationClient != null)
 			mLocationClient.connect();
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+
+		loadSpots();
 	}
 
 	
@@ -211,7 +217,13 @@ public class MainActivity extends ActionBarActivity implements
 
 	private void createMarkersFromSpots(List<Spot> spots) {
 		if(map != null){
-			mMarkerSpot = new HashMap<Marker, Spot>(spots.size());
+			if(mMarkerSpot == null)
+				mMarkerSpot = new HashMap<Marker, Spot>(spots.size());
+			else{
+				for(Entry<Marker,Spot> entry : mMarkerSpot.entrySet())
+					entry.getKey().remove();
+				mMarkerSpot.clear();
+			}
 			for(Spot spot : spots){
 				mMarkerSpot.put(map.addMarker(new MarkerOptions()
 						.position(new LatLng(spot.getLatitude(), spot.getLongitude()))

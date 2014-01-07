@@ -41,5 +41,8 @@
         <item>Loading...</item>
     </string-array>
         <string name="you_must_log_in_">You must log in.</string>
+        <string name="you_must_provide_a_name_">You must provide a name.</string>
+        <string name="you_must_provide_a_description_">You must provide a description.</string>
+        <string name="click_on_the_map_to_mark_the_spot_s_location_">Click on the map to mark the spot\'s location.</string>
 
 </resources>

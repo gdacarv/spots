@@ -16,11 +16,11 @@ public class PostSpots {
 	public PostSpots() {
 	}
 
-	public void setSpot(OnSpotsReceiver receiver) {
+	public void setSpot(OnSpotReceiver receiver) {
 		postSpot(receiver, null);
 	}
 
-	public void newSpot(OnSpotsReceiver receiver, Spot spot, long creatorId) {
+	public void newSpot(OnSpotReceiver receiver, Spot spot, long creatorId) {
 		String sports = "";
 		List<Sport> spotSports = spot.getSports();
 		for (int i = 0; i < spotSports.size()-1; i++) {
@@ -37,7 +37,7 @@ public class PostSpots {
 		postSpot(receiver, params);
 	}
 
-	public void editSpot(OnSpotsReceiver receiver, Spot spot) {
+	public void editSpot(OnSpotReceiver receiver, Spot spot) {
 		String params[] = {"id", String.valueOf(spot.getId()),
 				"name", String.valueOf(spot.getName()),
 				"description", String.valueOf(spot.getDescription()),
@@ -47,9 +47,7 @@ public class PostSpots {
 		postSpot(receiver, params);
 	}
 
-	private void postSpot(OnSpotsReceiver receiver, String[] params) {
-		if(receiver == null)
-			return;
+	private void postSpot(OnSpotReceiver receiver, String[] params) {
 		PostSpotsAsyncTask task = new PostSpotsAsyncTask(receiver);
 		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
 			task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, params);
@@ -57,7 +55,7 @@ public class PostSpots {
 			task.execute(params);
 	}
 	
-	public interface OnSpotsReceiver{
+	public interface OnSpotReceiver{
 		void onSpotsReceived(Spot spot);
 	}
 }

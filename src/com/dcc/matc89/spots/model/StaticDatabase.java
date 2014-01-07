@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.dcc.matc89.spots.network.PostSpots;
-import com.dcc.matc89.spots.network.PostSpots.OnSpotsReceiver;
+import com.dcc.matc89.spots.network.PostSpots.OnSpotReceiver;
 
 public class StaticDatabase {
 	
@@ -46,7 +46,7 @@ public class StaticDatabase {
 				new Sport(6, "Escalada"),
 				new Sport(3, "Parkour"))
 				);
-		OnSpotsReceiver receiver = new OnSpotsReceiver(){
+		OnSpotReceiver receiver = new OnSpotReceiver(){
 			@Override
 			public void onSpotsReceived(Spot spot){}
 		};
