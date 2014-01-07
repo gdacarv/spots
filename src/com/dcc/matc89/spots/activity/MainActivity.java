@@ -1,9 +1,11 @@
 package com.dcc.matc89.spots.activity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -20,9 +22,12 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.dcc.matc89.spots.R;
+import com.dcc.matc89.spots.model.Sport;
 import com.dcc.matc89.spots.model.Spot;
 import com.dcc.matc89.spots.network.FetchSpots;
 import com.dcc.matc89.spots.network.FetchSpots.OnSpotsReceiver;
+import com.dcc.matc89.spots.view.CheckboxesDropdownView;
+import com.dcc.matc89.spots.view.CheckboxesDropdownView.OnDropdownCheckedChangeListener;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -30,7 +35,6 @@ import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
-import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -47,6 +51,7 @@ public class MainActivity extends ActionBarActivity implements
 	private GoogleMap map;
 	private Location mCurrentLocation;
 	private Map<Marker,Spot> mMarkerSpot;
+	private List<Sport> mSports;
 	
 
 	@Override
@@ -198,7 +203,9 @@ public class MainActivity extends ActionBarActivity implements
 		@Override
 		public void onSpotsReceived(List<Spot> spots) {
 			findViewById(R.id.pgs_map).setVisibility(View.INVISIBLE);
+			mSports = getSports(spots);
 			createMarkersFromSpots(spots);
+			configureSportsPicker();
 		}
 	};
 
@@ -224,4 +231,52 @@ public class MainActivity extends ActionBarActivity implements
 			startActivity(i);
 		}
 	};
+
+	private List<Sport> getSports(List<Spot> spots) {
+		List<Sport> sports = new ArrayList<Sport>();
+		for(Spot spot : spots)
+			for(Sport sport : spot.getSports()) {
+				boolean alreadyContains = false;
+				for(Sport sportInList : sports)
+					if(sportInList.getId() == sport.getId()){
+						alreadyContains = true;
+						break;
+					}
+				if(!alreadyContains)
+					sports.add(sport);
+			}
+		return sports;
+	}
+
+	private void configureSportsPicker() {
+		CheckboxesDropdownView picker = (CheckboxesDropdownView) findViewById(R.id.sport_picker);
+		picker.setItems(new ArrayList<Sport>(mSports));
+		picker.setCheckedAll(true);
+		picker.setOnDropdownCheckedChangeListener(onDropdownCheckedChangeListener);
+		picker.setVisibility(View.VISIBLE);
+	}
+	
+	private OnDropdownCheckedChangeListener onDropdownCheckedChangeListener = new OnDropdownCheckedChangeListener() {
+		
+		@Override
+		public void onCheckedChanged(CheckboxesDropdownView picker, int index, boolean isChecked) {
+			configureMarkersVisibility(picker.getState(), mSports);
+		}
+	};
+
+	private void configureMarkersVisibility(boolean[] states, List<Sport> sports) {
+		for(Entry<Marker,Spot> entry : mMarkerSpot.entrySet()){
+			boolean visible = false;
+			for(Sport sport : entry.getValue().getSports())
+				visible |= getState(states, sports, sport);
+			entry.getKey().setVisible(visible);
+		}
+	}
+
+	private boolean getState(boolean[] states, List<Sport> sports, Sport sport) {
+		for(int i = 0; i < sports.size(); i++)
+			if(sports.get(i).getId() == sport.getId())
+				return states[i];
+		return false;
+	}
 }
