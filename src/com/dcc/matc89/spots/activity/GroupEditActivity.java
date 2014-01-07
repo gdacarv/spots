@@ -1,25 +1,36 @@
 package com.dcc.matc89.spots.activity;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dcc.matc89.spots.R;
+import com.dcc.matc89.spots.model.Group;
 import com.dcc.matc89.spots.model.Sport;
-import com.dcc.matc89.spots.model.StaticDatabase;
+import com.dcc.matc89.spots.model.User;
+import com.dcc.matc89.spots.network.FetchGroups.OnGroupsReceiver;
+import com.dcc.matc89.spots.network.FetchSports;
+import com.dcc.matc89.spots.network.FetchSports.OnSportsReceiver;
+import com.dcc.matc89.spots.network.PostGroups;
 
-public class GroupEditActivity extends ActionBarActivity {
+public class GroupEditActivity extends LoginActionBarActivity {
 	
 	//private EditText mName, mDescription;
 	private Spinner mSport;
+	private TextView mNameText, mDescriptionText;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -32,11 +43,26 @@ public class GroupEditActivity extends ActionBarActivity {
 	}
 
 	private void setupViews() {
+		mNameText = (TextView) findViewById(R.id.txt_editgroup_name);
+		mDescriptionText = (TextView) findViewById(R.id.txt_editgroup_description);
 		mSport = (Spinner) findViewById(R.id.spn_editgroup_sport);
 		
-		List<Sport> sports = getAllSports();
-		SpinnerAdapter adapter = new ArrayAdapter<Sport>(this, android.R.layout.simple_spinner_item, sports);
-		mSport.setAdapter(adapter);
+		new FetchSports().getSports(onSportsReceiver);
+		
+	}
+
+	private OnSportsReceiver onSportsReceiver = new OnSportsReceiver() {
+		
+		@Override
+		public void onSportsReceived(List<Sport> sports) {
+			setupSportSpinner(sports);
+			findViewById(R.id.pgs_sports).setVisibility(View.INVISIBLE);
+		}
+	};
+	
+	private void setupSportSpinner(List<Sport> sports) {
+		SpinnerAdapter sportsAdapter = new ArrayAdapter<Sport>(this, android.R.layout.simple_spinner_item, sports);
+		mSport.setAdapter(sportsAdapter);
 	}
 
 	/**
@@ -69,17 +95,40 @@ public class GroupEditActivity extends ActionBarActivity {
 			NavUtils.navigateUpFromSameTask(this);
 			return true;
 		case R.id.action_save:
-			// TODO Send new group OR update group to WEB API
-			setResult(RESULT_OK);
-			finish();
+			saveGroup();
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
 
-	private List<Sport> getAllSports() { // This method can't perform long running operations such as network requests.
-		// TODO Get real sports. 
-		
-		return StaticDatabase.getSingleton().getSports();
+	private void saveGroup() {
+		String name = mNameText.getText().toString();
+		if(name == null || name.length() == 0){
+			Toast.makeText(this, R.string.you_must_provide_a_name_, Toast.LENGTH_SHORT).show();
+			return;
+		}
+		String description = mDescriptionText.getText().toString();
+		if(description == null || description.length() == 0){
+			Toast.makeText(this, R.string.you_must_provide_a_description_, Toast.LENGTH_SHORT).show();
+			return;
+		}
+		long userId = User.getCurrentUser(this).getId();
+		final Group group = new Group(-1, name, description, Arrays.asList(Long.valueOf(userId)), Collections.<Long>emptyList(), (Sport) mSport.getSelectedItem());
+		new PostGroups().newGroup(new OnGroupsReceiver() {
+			
+			@Override
+			public void onGroupsReceived(List<Group> groups) {
+				group.setId(groups.get(0).getId());
+			}
+		}, group, userId);
+		Intent intent = new Intent(this, GroupDetailActivity.class);
+		intent.putExtra(GroupDetailActivity.GROUP_KEY, group);
+		startActivity(intent);
+		setResult(RESULT_OK);
+		finish();
+	}
+
+	@Override
+	protected void onLoggedIn(User user) {
 	}
 }

@@ -53,6 +53,12 @@ public class GroupListActivity extends ActionBarActivity {
 		// Show the Up button in the action bar.
 		setupActionBar();
 		
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+
 		loadGroups();
 	}
 
@@ -114,6 +120,7 @@ public class GroupListActivity extends ActionBarActivity {
 		if(result == null || result.isEmpty())
 			mTextEmpty.setVisibility(View.VISIBLE);
 		else{
+			mTextEmpty.setVisibility(View.INVISIBLE);
 			ListAdapter adapter = new ArrayAdapter<Group>(GroupListActivity.this, android.R.layout.simple_list_item_1, result);
 			mListView.setAdapter(adapter);
 		}

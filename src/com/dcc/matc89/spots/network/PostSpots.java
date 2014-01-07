@@ -16,10 +16,6 @@ public class PostSpots {
 	public PostSpots() {
 	}
 
-	public void setSpot(OnSpotReceiver receiver) {
-		postSpot(receiver, null);
-	}
-
 	public void newSpot(OnSpotReceiver receiver, Spot spot, long creatorId) {
 		String sports = "";
 		List<Sport> spotSports = spot.getSports();

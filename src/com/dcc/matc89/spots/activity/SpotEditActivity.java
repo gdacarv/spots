@@ -20,13 +20,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dcc.matc89.spots.R;
-import com.dcc.matc89.spots.model.Group;
 import com.dcc.matc89.spots.model.Sport;
 import com.dcc.matc89.spots.model.Spot;
 import com.dcc.matc89.spots.model.User;
 import com.dcc.matc89.spots.network.FetchSports;
 import com.dcc.matc89.spots.network.FetchSports.OnSportsReceiver;
 import com.dcc.matc89.spots.network.PostSpots;
+import com.dcc.matc89.spots.network.PostSpots.OnSpotReceiver;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -158,8 +158,14 @@ public class SpotEditActivity extends LoginActionBarActivity {
 			Toast.makeText(this, R.string.click_on_the_map_to_mark_the_spot_s_location_, Toast.LENGTH_SHORT).show();
 			return;
 		}
-		Spot spot = new Spot(-1, name, description, Collections.<Long>emptyList(), Arrays.asList((Sport)mSport.getSelectedItem()), mMarker.getPosition().latitude, mMarker.getPosition().longitude);
-		new PostSpots().newSpot(null, spot, User.getCurrentUser(this).getId());
+		final Spot spot = new Spot(-1, name, description, Collections.<Long>emptyList(), Arrays.asList((Sport)mSport.getSelectedItem()), mMarker.getPosition().latitude, mMarker.getPosition().longitude);
+		new PostSpots().newSpot(new OnSpotReceiver() {
+			
+			@Override
+			public void onSpotsReceived(Spot spotSaved) {
+				spot.setId(spotSaved.getId());
+			}
+		}, spot, User.getCurrentUser(this).getId());
 		Intent intent = new Intent(this, SpotDetailActivity.class);
 		intent.putExtra(SpotDetailActivity.SPOT_KEY, spot);
 		startActivity(intent);
