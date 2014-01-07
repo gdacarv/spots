@@ -101,7 +101,7 @@ public class MainActivity extends ActionBarActivity implements
 			startActivity(i);
 			break;
 		case R.id.action_groups:
-			Intent i2 = new Intent(this, GroupListActivity.class);
+			Intent i2 = new Intent(this, MyGroupsListActivity.class);
 			startActivity(i2);
 			break;
 

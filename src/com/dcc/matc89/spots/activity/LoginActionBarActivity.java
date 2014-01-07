@@ -37,6 +37,9 @@ public abstract class LoginActionBarActivity extends ActionBarActivity implement
 			supportFragmentManager.beginTransaction().remove(login).commitAllowingStateLoss();
 			login.hide();
 			mContent.setVisibility(View.VISIBLE);
+			onLoggedIn(user);
 		}
 	}
+
+	protected abstract void onLoggedIn(User user);
 }

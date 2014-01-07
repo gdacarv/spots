@@ -178,4 +178,8 @@ public class SpotEditActivity extends LoginActionBarActivity {
 		}
 	};
 
+	@Override
+	protected void onLoggedIn(User user) {
+	}
+
 }
