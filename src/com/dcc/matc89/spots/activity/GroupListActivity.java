@@ -13,16 +13,20 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dcc.matc89.spots.R;
 import com.dcc.matc89.spots.model.Group;
 import com.dcc.matc89.spots.model.Spot;
 import com.dcc.matc89.spots.model.User;
 import com.dcc.matc89.spots.network.FetchGroups;
+import com.dcc.matc89.spots.network.OnResultReceiver;
 import com.dcc.matc89.spots.network.FetchGroups.OnGroupsReceiver;
+import com.dcc.matc89.spots.network.PostLinkSpotGroup;
 
 public class GroupListActivity extends ActionBarActivity {
 
@@ -36,6 +40,7 @@ public class GroupListActivity extends ActionBarActivity {
 	
 	private Spot mSpot;
 	private User mUser;
+	private List<Group> mGroups;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -52,14 +57,9 @@ public class GroupListActivity extends ActionBarActivity {
 		
 		// Show the Up button in the action bar.
 		setupActionBar();
-		
-	}
-	
-	@Override
-	protected void onResume() {
-		super.onResume();
 
 		loadGroups();
+		
 	}
 
 	/**
@@ -72,7 +72,8 @@ public class GroupListActivity extends ActionBarActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.group_list, menu);
+		if(mUser == null) // Only show "Add Group" if this list is not a list from some other user
+			getMenuInflater().inflate(R.menu.group_list, menu);
 		return true;
 	}
 
@@ -90,7 +91,8 @@ public class GroupListActivity extends ActionBarActivity {
 			NavUtils.navigateUpFromSameTask(this);
 			return true;
 		case R.id.action_group_add:
-			Intent i = new Intent(this, GroupEditActivity.class);
+			Intent i = new Intent(this, MyGroupsListActivity.class);
+			i.putExtra(MyGroupsListActivity.SELECT_GROUP, true);
 			startActivityForResult(i, CODE_ADD_GROUP);
 		}
 		return super.onOptionsItemSelected(item);
@@ -100,7 +102,21 @@ public class GroupListActivity extends ActionBarActivity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		if(requestCode == CODE_ADD_GROUP && resultCode == RESULT_OK){
-			// TODO Reload list
+			Group group = (Group) data.getSerializableExtra(MyGroupsListActivity.GROUP_SELECTED);
+			if(group.containsSpot(mSpot)){
+				Toast.makeText(this, R.string.the_spot_already_contains_this_group_, Toast.LENGTH_SHORT).show();
+				return;
+			}
+			mSpot.getGroupsIds().add(group.getId());
+			group.getSpots().add(mSpot.getId());
+			new PostLinkSpotGroup().linkSpotGroup(mSpot, group, new OnResultReceiver() {
+				
+				@Override
+				public void onResult(boolean okay, String result) {
+				}
+			});
+			mGroups.add(group);
+			((BaseAdapter) mListView.getAdapter()).notifyDataSetChanged();
 		}
 	}
 
@@ -114,9 +130,11 @@ public class GroupListActivity extends ActionBarActivity {
 			startActivity(i);
 		}
 	};
+
 	
 	private void showGroups(List<Group> result) {
 		mProgressLoading.setVisibility(View.INVISIBLE);
+		mGroups = result;
 		if(result == null || result.isEmpty())
 			mTextEmpty.setVisibility(View.VISIBLE);
 		else{

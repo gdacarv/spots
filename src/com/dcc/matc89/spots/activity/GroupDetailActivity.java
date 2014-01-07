@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.dcc.matc89.spots.R;
 import com.dcc.matc89.spots.model.Group;
+import com.dcc.matc89.spots.model.User;
 
 public class GroupDetailActivity extends ActionBarActivity {
 	
@@ -21,8 +22,8 @@ public class GroupDetailActivity extends ActionBarActivity {
 	
 	private Group mGroup;
 	
-	private TextView mDescription, mSport, mUsersCount, mSpotsCount;
-	private View mUsers, mSpots, mJoin;
+	private TextView mDescription, mSport, mUsersCount, mSpotsCount, mJoin;
+	private View mUsers, mSpots;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +44,17 @@ public class GroupDetailActivity extends ActionBarActivity {
 		mSpotsCount = (TextView) findViewById(R.id.txt_group_spots);
 		mUsers = findViewById(R.id.view_group_users);
 		mSpots = findViewById(R.id.view_group_spots);
-		mJoin = findViewById(R.id.btn_group_join);
+		mJoin = (TextView) findViewById(R.id.btn_group_join);
+		User user = User.getCurrentUser(this);
+		if(user == null)
+			mJoin.setVisibility(View.GONE);
+		else{
+			if(mGroup.containsUser(user))
+				mJoin.setText(R.string.leave_group);
+			else
+				mJoin.setText(R.string.join_group);
+		}
+		
 		
 		mDescription.setText(mGroup.getDescription());
 		mSport.setText(mGroup.getSport().getName());
@@ -104,7 +115,6 @@ public class GroupDetailActivity extends ActionBarActivity {
 			Intent i = new Intent(GroupDetailActivity.this, SpotListActivity.class);
 			i.putExtra(SpotListActivity.GROUP_KEY, mGroup);
 			startActivity(i);
-			//Toast.makeText(GroupDetailActivity.this, "Spots clicked.", Toast.LENGTH_SHORT).show(); // TODO Remove this, and make real connections
 		}
 	};
 	

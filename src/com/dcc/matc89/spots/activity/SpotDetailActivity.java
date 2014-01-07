@@ -79,6 +79,13 @@ public class SpotDetailActivity extends ActionBarActivity {
 		
 		setupViews();
 	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+
+		mGroupsCount.setText(String.valueOf(mSpot.getGroupsCount()));
+	}
 
 	private void setupViews() {
 		mDescription = (TextView) findViewById(R.id.txt_spot_description);
@@ -88,7 +95,6 @@ public class SpotDetailActivity extends ActionBarActivity {
 		mSports = (LinearLayout) findViewById(R.id.list_spot_sports);
 		
 		mDescription.setText(mSpot.getDescription());
-		mGroupsCount.setText(String.valueOf(mSpot.getGroupsCount()));
 		mGroups.setOnClickListener(onGroupsClickListener);
 		
 		for (int i = 0; i < 4; i = i + 1){

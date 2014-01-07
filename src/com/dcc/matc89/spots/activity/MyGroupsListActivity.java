@@ -6,7 +6,6 @@ import java.util.List;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
-import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,19 +29,22 @@ public class MyGroupsListActivity extends LoginActionBarActivity {
 	private static final int CODE_ADD_GROUP = 1;
 	public static final String SPOT_KEY = "spot_key";
 	public static final String USER_KEY = "user_key";
-	
+	public static final String GROUP_SELECTED = "group_selected";
+	public static final String SELECT_GROUP = "select_group";
+
 	private TextView mTextEmpty;
 	private View mProgressLoading;
 	private ListView mListView;
-	
+
 	private Spot mSpot;
 	private User mUser;
+	private boolean mIsSelectingGroup;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_group_list);
-		
+
 		mTextEmpty = (TextView) findViewById(R.id.group_list_empty);
 		mProgressLoading = findViewById(R.id.pgs_groups);
 		mListView = (ListView) findViewById(R.id.list);
@@ -50,10 +52,18 @@ public class MyGroupsListActivity extends LoginActionBarActivity {
 
 		mSpot = null;
 		mUser = User.getCurrentUser(this);
-		
+
+		mIsSelectingGroup = getIntent().getBooleanExtra(SELECT_GROUP, false);
+
 		// Show the Up button in the action bar.
 		setupActionBar();
-		
+
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+
 		loadGroups();
 	}
 
@@ -67,7 +77,8 @@ public class MyGroupsListActivity extends LoginActionBarActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.group_list, menu);
+		if(!mIsSelectingGroup)
+			getMenuInflater().inflate(R.menu.group_list, menu);
 		return true;
 	}
 
@@ -90,7 +101,7 @@ public class MyGroupsListActivity extends LoginActionBarActivity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
+
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
@@ -104,12 +115,18 @@ public class MyGroupsListActivity extends LoginActionBarActivity {
 		@Override
 		public void onItemClick(AdapterView<?> adapterView, View view, int position,
 				long id) {
-			Intent i = new Intent(MyGroupsListActivity.this, GroupDetailActivity.class);
-			i.putExtra(GroupDetailActivity.GROUP_KEY, (Serializable) adapterView.getAdapter().getItem(position));
-			startActivity(i);
+			Serializable group = (Serializable) adapterView.getAdapter().getItem(position);
+			if(mIsSelectingGroup){
+				setResult(RESULT_OK, new Intent().putExtra(GROUP_SELECTED, group));
+				finish();
+			} else{
+				Intent i = new Intent(MyGroupsListActivity.this, GroupDetailActivity.class);
+				i.putExtra(GroupDetailActivity.GROUP_KEY, group);
+				startActivity(i);
+			}
 		}
 	};
-	
+
 	private void showGroups(List<Group> result) {
 		mProgressLoading.setVisibility(View.INVISIBLE);
 		if(result == null || result.isEmpty())
@@ -128,9 +145,9 @@ public class MyGroupsListActivity extends LoginActionBarActivity {
 			new FetchGroups().getGroupsFromUser(onGroupsReceiver, mUser.getId());
 		}
 	}
-	
+
 	private OnGroupsReceiver onGroupsReceiver = new OnGroupsReceiver() {
-		
+
 		@Override
 		public void onGroupsReceived(List<Group> groups) {
 			showGroups(groups);

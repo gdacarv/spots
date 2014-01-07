@@ -116,4 +116,20 @@ public class Group implements Serializable{
 	public String toString() { // Need to override this to use ArrayAdapter.
 		return getName();
 	}
+	
+	public boolean containsUser(User user){
+		Long userId = user.getId();
+		for(Long id : users)
+			if(id.equals(userId))
+				return true;
+		return false;
+	}
+	
+	public boolean containsSpot(Spot spot){
+		Long spotId = spot.getId();
+		for(Long id : spots)
+			if(id.equals(spotId))
+				return true;
+		return false;
+	}
 }

@@ -3,12 +3,8 @@ package com.dcc.matc89.spots.activity;
 import java.io.Serializable;
 import java.util.List;
 
-import android.annotation.TargetApi;
 import android.content.Intent;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -23,10 +19,7 @@ import android.widget.TextView;
 
 import com.dcc.matc89.spots.R;
 import com.dcc.matc89.spots.model.Group;
-import com.dcc.matc89.spots.model.Spot;
 import com.dcc.matc89.spots.model.User;
-import com.dcc.matc89.spots.network.FetchSpots;
-import com.dcc.matc89.spots.network.FetchSpots.OnSpotsReceiver;
 import com.dcc.matc89.spots.network.FetchUsers;
 import com.dcc.matc89.spots.network.FetchUsers.OnUsersReceiver;
 
@@ -106,6 +99,7 @@ public class UserListActivity extends ActionBarActivity {
 		if(result == null || result.isEmpty())
 			mTextEmpty.setVisibility(View.VISIBLE);
 		else{
+			mTextEmpty.setVisibility(View.INVISIBLE);
 			ListAdapter adapter = new ArrayAdapter<User>(UserListActivity.this, android.R.layout.simple_list_item_1, result);
 			mListView.setAdapter(adapter);
 		}

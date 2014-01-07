@@ -44,5 +44,7 @@
         <string name="you_must_provide_a_name_">You must provide a name.</string>
         <string name="you_must_provide_a_description_">You must provide a description.</string>
         <string name="click_on_the_map_to_mark_the_spot_s_location_">Click on the map to mark the spot\'s location.</string>
+        <string name="leave_group">Leave Group</string>
+        <string name="the_spot_already_contains_this_group_">The spot already contains this group.</string>
 
 </resources>
