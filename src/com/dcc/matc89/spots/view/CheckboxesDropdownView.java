@@ -8,6 +8,8 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -72,6 +74,7 @@ public class CheckboxesDropdownView extends DropdownView{
 	private View getListView() {
 		Context context = getContext();
 		ListView list = new ListView(context);
+		list.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 		mAdapter = new CheckBoxesAdapter(context);
 		list.setAdapter(mAdapter);
 		return list;
@@ -89,6 +92,7 @@ public class CheckboxesDropdownView extends DropdownView{
 			if(convertView == null){
 				convertView = new CheckBox(getContext());
 				((CheckBox)convertView).setOnCheckedChangeListener(onCheckedChangeListener);
+				convertView.setLayoutParams(new AbsListView.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 			}
 			
 			convertView.setTag(null);

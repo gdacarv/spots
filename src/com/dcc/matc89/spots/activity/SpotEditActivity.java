@@ -3,20 +3,10 @@ package com.dcc.matc89.spots.activity;
 import java.util.Arrays;
 import java.util.List;
 
-import com.dcc.matc89.spots.R;
-import com.dcc.matc89.spots.model.Sport;
-import com.dcc.matc89.spots.model.Spot;
-import com.dcc.matc89.spots.model.StaticDatabase;
-import com.dcc.matc89.spots.network.FetchSports;
-import com.dcc.matc89.spots.network.FetchSports.OnSportsReceiver;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,12 +14,17 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
-import android.support.v4.app.NavUtils;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
+
+import com.dcc.matc89.spots.R;
+import com.dcc.matc89.spots.model.Sport;
+import com.dcc.matc89.spots.model.Spot;
+import com.dcc.matc89.spots.network.FetchSports;
+import com.dcc.matc89.spots.network.FetchSports.OnSportsReceiver;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.SupportMapFragment;
 
 //Para que a ActionBar funcione em todas as vers�es � necess�rio estender ActionBarActivity ao inv�s de Activity
-public class SpotEditActivity extends ActionBarActivity {
+public class SpotEditActivity extends LoginActionBarActivity {
 		
 	private Spot mSpot;
 	private Spinner mSport, mPics;
@@ -56,7 +51,7 @@ public class SpotEditActivity extends ActionBarActivity {
 		mPics.setAdapter(picsAdapter);
 		
 		//TODO change this to location clicked on main activity before adding spot or to the spot being edited.
-		mSpot = StaticDatabase.getSingleton().getSpots().get(0);
+		//mSpot = StaticDatabase.getSingleton().getSpots().get(0);
 		
 		mapImage = (ImageView) findViewById(R.id.mapSnapshotEdit);
 		SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapSpotEdit);
@@ -64,8 +59,8 @@ public class SpotEditActivity extends ActionBarActivity {
 		
 		if (map != null) {
 			map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-			map.addMarker(new MarkerOptions().position(mSpot.getLatLng()));
-			map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mSpot.getLatitude() + 0.001,mSpot.getLongitude()), 15));
+			//map.addMarker(new MarkerOptions().position(mSpot.getLatLng()));
+			//map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mSpot.getLatitude() + 0.001,mSpot.getLongitude()), 15));
 
 			
 			map.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {

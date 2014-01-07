@@ -1,6 +1,8 @@
 package com.dcc.matc89.spots.network;
 
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 public class Utils {
 	static String convertInputStreamToString(InputStream is) {
@@ -19,7 +21,11 @@ public class Utils {
 		for(int i = 0; i < params.length-1; i+=2){
 			if(i > 0)
 				builder.append('&');
-			builder.append(params[i]).append('=').append(params[i+1]);
+			try {
+				builder.append(URLEncoder.encode(params[i], "UTF-8")).append('=').append(URLEncoder.encode(params[i+1], "UTF-8"));
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
 		}
 		return builder.toString();
 	}

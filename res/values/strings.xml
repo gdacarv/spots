@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    
+    <string name="fb_app_id">201579420047084</string>
 
     <string name="action_search">Search</string>
     <string name="action_settings">Settings</string>
@@ -38,5 +40,6 @@
     <string-array name="spinner_loading">
         <item>Loading...</item>
     </string-array>
+        <string name="you_must_log_in_">You must log in.</string>
 
 </resources>
