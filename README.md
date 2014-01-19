@@ -3,6 +3,8 @@ spots
 
 An open-source, map collaborative Android application, where users can register and find the best locations to practice their favorites sports. 
 
+This app uses a backend developed here: https://github.com/gdacarv/spots-server
+
 To able able to use it, you must import google play service library (because of Google Maps), Facebook SDK and android-support-v7-appcompat.
 
 
